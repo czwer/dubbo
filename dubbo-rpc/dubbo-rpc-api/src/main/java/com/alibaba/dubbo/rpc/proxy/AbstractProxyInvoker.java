@@ -15,26 +15,28 @@
  */
 package com.alibaba.dubbo.rpc.proxy;
 
-import java.lang.reflect.InvocationTargetException;
-
 import com.alibaba.dubbo.common.URL;
-import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.Invocation;
+import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.Result;
+import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.RpcResult;
+import com.dianping.cat.Cat;
+import com.dianping.cat.message.Transaction;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * InvokerWrapper
- * 
+ *
  * @author william.liangf
  */
 public abstract class AbstractProxyInvoker<T> implements Invoker<T> {
-    
+
     private final T proxy;
-    
+
     private final Class<T> type;
-    
+
     private final URL url;
 
     public AbstractProxyInvoker(T proxy, Class<T> type, URL url){
@@ -68,15 +70,24 @@ public abstract class AbstractProxyInvoker<T> implements Invoker<T> {
     }
 
     public Result invoke(Invocation invocation) throws RpcException {
+        Transaction transaction = Cat.newTransaction("Service", invocation.getInvoker().getInterface().getSimpleName() + "." + invocation.getMethodName());
         try {
-            return new RpcResult(doInvoke(proxy, invocation.getMethodName(), invocation.getParameterTypes(), invocation.getArguments()));
+            RpcResult rpcResult = new RpcResult(doInvoke(proxy, invocation.getMethodName(), invocation.getParameterTypes(), invocation.getArguments()));
+            transaction.setStatus(Transaction.SUCCESS);
+            return rpcResult;
         } catch (InvocationTargetException e) {
+            Cat.getProducer().logError(e);
+            transaction.setStatus(e);
             return new RpcResult(e.getTargetException());
         } catch (Throwable e) {
+            Cat.getProducer().logError(e);
+            transaction.setStatus(e);
             throw new RpcException("Failed to invoke remote proxy method " + invocation.getMethodName() + " to " + getUrl() + ", cause: " + e.getMessage(), e);
+        } finally {
+            transaction.complete();
         }
     }
-    
+
     protected abstract Object doInvoke(T proxy, String methodName, Class<?>[] parameterTypes, Object[] arguments) throws Throwable;
 
     @Override
@@ -84,5 +95,5 @@ public abstract class AbstractProxyInvoker<T> implements Invoker<T> {
         return getInterface() + " -> " + getUrl()==null?" ":getUrl().toString();
     }
 
-    
+
 }
