@@ -14,21 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.dubbo.spring.boot;
+package org.apache.dubbo.rpc.protocol.tri.rest.openapi;
 
-import org.apache.dubbo.spring.boot.autoconfigure.CompatibleDubboAutoConfigurationTest;
-import org.apache.dubbo.spring.boot.autoconfigure.CompatibleDubboAutoConfigurationTestWithoutProperties;
-import org.apache.dubbo.spring.boot.autoconfigure.base.DubboAutoConfigurationOnMultipleConfigTest;
-import org.apache.dubbo.spring.boot.autoconfigure.base.DubboAutoConfigurationOnSingleConfigTest;
+import org.apache.dubbo.common.extension.ExtensionScope;
+import org.apache.dubbo.common.extension.SPI;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+@SPI(scope = ExtensionScope.FRAMEWORK)
+public interface OpenAPIExtension {
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-    CompatibleDubboAutoConfigurationTest.class,
-    CompatibleDubboAutoConfigurationTestWithoutProperties.class,
-    DubboAutoConfigurationOnMultipleConfigTest.class,
-    DubboAutoConfigurationOnSingleConfigTest.class
-})
-public class TestSuite {}
+    default String[] getGroups() {
+        return null;
+    }
+}
