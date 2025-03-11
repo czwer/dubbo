@@ -125,6 +125,7 @@
     <micrometer.version>1.14.4</micrometer.version>
     <opentelemetry.version>1.48.0</opentelemetry.version>
     <zipkin-reporter.version>3.5.0</zipkin-reporter.version>
+    <zipkin.version>3.5.0</zipkin.version>
     <micrometer-tracing.version>1.4.3</micrometer-tracing.version>
     <t_digest.version>3.3</t_digest.version>
     <prometheus_client.version>0.16.0</prometheus_client.version>
@@ -244,6 +245,11 @@
         <version>${zipkin-reporter.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.zipkin.zipkin2</groupId>
+        <artifactId>zipkin</artifactId>
+        <version>${zipkin.version}</version>
       </dependency>
       <dependency>
         <groupId>io.prometheus</groupId>
