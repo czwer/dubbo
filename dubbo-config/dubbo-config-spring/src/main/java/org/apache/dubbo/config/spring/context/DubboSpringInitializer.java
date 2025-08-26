@@ -25,6 +25,9 @@ import org.apache.dubbo.rpc.model.FrameworkModel;
 import org.apache.dubbo.rpc.model.ModuleModel;
 import org.apache.dubbo.rpc.model.ScopeModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +52,7 @@ public class DubboSpringInitializer {
     public DubboSpringInitializer() {}
 
     public static void initialize(BeanDefinitionRegistry registry) {
+        List<String> beforeBeanDefinitionNames = new ArrayList<>(Arrays.asList(registry.getBeanDefinitionNames()));
 
         // prepare context and do customize
         DubboSpringInitContext context = new DubboSpringInitContext();
@@ -63,6 +67,10 @@ public class DubboSpringInitializer {
 
         // init dubbo context
         initContext(context, registry, beanFactory);
+
+        List<String> afterBeanDefinitionNames = new ArrayList<>(Arrays.asList(registry.getBeanDefinitionNames()));
+        afterBeanDefinitionNames.removeAll(beforeBeanDefinitionNames);
+        logger.info("自定义日志---Dubbo与Spring整合环境初始化，新增bean定义：" + String.join(",", afterBeanDefinitionNames));
     }
 
     public static boolean remove(BeanDefinitionRegistry registry) {

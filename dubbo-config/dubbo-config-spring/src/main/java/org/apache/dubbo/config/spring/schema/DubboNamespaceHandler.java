@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.schema;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ConsumerConfig;
 import org.apache.dubbo.config.MetadataReportConfig;
@@ -47,6 +49,9 @@ import org.w3c.dom.Element;
  * @export
  */
 public class DubboNamespaceHandler extends NamespaceHandlerSupport implements ConfigurableSourceBeanMetadataElement {
+
+    private static final Logger logger = LoggerFactory.getLogger(DubboNamespaceHandler.class);
+
     @Override
     public void init() {
         registerBeanDefinitionParser("application", new DubboBeanDefinitionParser(ApplicationConfig.class));
@@ -76,6 +81,9 @@ public class DubboNamespaceHandler extends NamespaceHandlerSupport implements Co
      */
     @Override
     public BeanDefinition parse(Element element, ParserContext parserContext) {
+        logger.info("自定义日志---dubbo命名空间xml解析，bean定义解析开始：nodeName：" + element.getNodeName() + ",nodeValue："
+                + element.getNodeValue());
+
         BeanDefinitionRegistry registry = parserContext.getRegistry();
         registerAnnotationConfigProcessors(registry);
 
@@ -84,6 +92,9 @@ public class DubboNamespaceHandler extends NamespaceHandlerSupport implements Co
 
         BeanDefinition beanDefinition = super.parse(element, parserContext);
         setSource(beanDefinition);
+
+        logger.info("自定义日志---dubbo命名空间xml解析，bean定义解析完成：" + beanDefinition.getBeanClassName());
+
         return beanDefinition;
     }
 

@@ -96,6 +96,10 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
     @SuppressWarnings("unchecked")
     private static RootBeanDefinition parse(
             Element element, ParserContext parserContext, Class<?> beanClass, boolean registered) {
+        logger.info(
+                "自定义日志---dubbo命名空间xml解析，解析中：nodeName：" + element.getNodeName() + ",nodeValue：" + element.getNodeValue()
+                        + ",beanClassName：" + beanClass.getName() + ",fileName："
+                        + parserContext.getReaderContext().getResource().getFilename() + ",registered：" + registered);
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
         beanDefinition.setBeanClass(beanClass);
         beanDefinition.setLazyInit(false);
