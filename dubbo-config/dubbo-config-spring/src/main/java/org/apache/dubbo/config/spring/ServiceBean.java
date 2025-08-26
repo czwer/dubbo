@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.config.ServiceConfig;
 import org.apache.dubbo.config.annotation.Service;
@@ -45,6 +47,8 @@ public class ServiceBean<T> extends ServiceConfig<T>
                 ApplicationContextAware,
                 BeanNameAware,
                 ApplicationEventPublisherAware {
+
+    private static final Logger logger = LoggerFactory.getLogger(ServiceBean.class);
 
     private static final long serialVersionUID = 213195494150089726L;
 
@@ -146,6 +150,7 @@ public class ServiceBean<T> extends ServiceConfig<T>
      */
     private void publishExportEvent() {
         ServiceBeanExportedEvent exportEvent = new ServiceBeanExportedEvent(this);
+        logger.info("自定义日志---发布ServiceBeanExportedEvent事件");
         applicationEventPublisher.publishEvent(exportEvent);
     }
 

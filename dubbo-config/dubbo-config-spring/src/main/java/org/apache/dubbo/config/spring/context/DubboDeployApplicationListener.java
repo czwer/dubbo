@@ -139,10 +139,12 @@ public class DubboDeployApplicationListener
     }
 
     private void publishModuleEvent(DeployState state) {
+        logger.info("自定义日志---发布DubboModuleStateEvent事件");
         applicationContext.publishEvent(new DubboModuleStateEvent(moduleModel, state));
     }
 
     private void publishModuleEvent(DeployState state, Throwable cause) {
+        logger.info("自定义日志---发布DubboModuleStateEvent事件");
         applicationContext.publishEvent(new DubboModuleStateEvent(moduleModel, state, cause));
     }
 
