@@ -79,6 +79,7 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     public void onApplicationEvent(ApplicationEvent event) {
         if (isOriginalEventSource(event)) {
             if (event instanceof DubboConfigInitEvent) {
+                logger.info("自定义日志---监听到DubboConfigInitEvent事件");
                 // This event will be notified at AbstractApplicationContext.registerListeners(),
                 // init dubbo config beans before spring singleton beans
                 initDubboConfigBeans();

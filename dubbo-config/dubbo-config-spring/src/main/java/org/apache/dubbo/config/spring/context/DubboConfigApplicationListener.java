@@ -55,6 +55,7 @@ public class DubboConfigApplicationListener
 
     @Override
     public void onApplicationEvent(DubboConfigInitEvent event) {
+        logger.info("自定义日志---监听到DubboConfigInitEvent事件");
         if (nullSafeEquals(applicationContext, event.getSource())) {
             init();
         }
@@ -70,6 +71,7 @@ public class DubboConfigApplicationListener
     }
 
     private void initDubboConfigBeans() {
+        logger.info("自定义日志---初始化Dubbo配置Bean");
         // load DubboConfigBeanInitializer to init config beans
         if (applicationContext.containsBean(DubboConfigBeanInitializer.BEAN_NAME)) {
             applicationContext.getBean(DubboConfigBeanInitializer.BEAN_NAME, DubboConfigBeanInitializer.class);
