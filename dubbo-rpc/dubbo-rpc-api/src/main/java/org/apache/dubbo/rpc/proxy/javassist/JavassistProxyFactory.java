@@ -42,6 +42,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Invoker<T> invoker, Class<?>[] interfaces) {
+        logger.info("自定义日志【重要】---通过JavassistProxyFactory获取代理对像："
+                + invoker.getInterface().getName());
         try {
             return (T) Proxy.getProxy(interfaces).newInstance(new InvokerInvocationHandler(invoker));
         } catch (Throwable fromJavassist) {
@@ -78,6 +80,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
 
     @Override
     public <T> Invoker<T> getInvoker(T proxy, Class<T> type, URL url) {
+        logger.info("自定义日志【重要】---通过JavassistProxyFactory获取Invoker，类名：" + type.getName());
         try {
             // TODO Wrapper cannot handle this scenario correctly: the classname contains '$'
             final Wrapper wrapper =
@@ -86,6 +89,7 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
                 @Override
                 protected Object doInvoke(T proxy, String methodName, Class<?>[] parameterTypes, Object[] arguments)
                         throws Throwable {
+                    logger.info("自定义日志【重要】---通过JavassistProxyFactory方法调用，类名：" + type.getName() + ",方法名：" + methodName);
                     return wrapper.invokeMethod(proxy, methodName, parameterTypes, arguments);
                 }
             };

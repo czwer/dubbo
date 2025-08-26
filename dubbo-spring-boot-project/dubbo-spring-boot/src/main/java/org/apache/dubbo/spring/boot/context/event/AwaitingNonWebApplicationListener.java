@@ -109,7 +109,7 @@ public class AwaitingNonWebApplicationListener implements SmartApplicationListen
     }
 
     protected void onApplicationReadyEvent(ApplicationReadyEvent event) {
-
+        logger.info("自定义日志---监听到ApplicationReadyEvent事件");
         final ConfigurableApplicationContext applicationContext = event.getApplicationContext();
 
         if (!isRootApplicationContext(applicationContext) || isWebApplication(applicationContext)) {

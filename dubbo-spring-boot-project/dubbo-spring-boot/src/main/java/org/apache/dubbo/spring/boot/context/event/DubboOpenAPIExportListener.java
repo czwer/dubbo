@@ -22,6 +22,8 @@ import org.apache.dubbo.rpc.model.ApplicationModel;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 
@@ -32,11 +34,12 @@ import org.springframework.context.ApplicationListener;
  * when the Spring Boot application is fully started and ready.
  */
 public class DubboOpenAPIExportListener implements ApplicationListener<ApplicationReadyEvent> {
-
+    private static final Logger logger = LoggerFactory.getLogger(DubboOpenAPIExportListener.class);
     private final AtomicBoolean exported = new AtomicBoolean(false);
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
+        logger.info("自定义日志---监听到ApplicationReadyEvent事件");
         if (!exported.compareAndSet(false, true)) {
             return;
         }

@@ -74,7 +74,9 @@ public class DubboConfigBeanInitializer implements BeanFactoryAware, Initializin
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        logger.info("自定义日志---Dubbo相关的配置Bean被正确地收集、初始化并注册到Dubbo的核心管理器中开始（Spring完成Bean属性注入后触发:afterPropertiesSet）");
         init();
+        logger.info("自定义日志---Dubbo相关的配置Bean被正确地收集、初始化并注册到Dubbo的核心管理器中完成（Spring完成Bean属性注入后触发:afterPropertiesSet）");
     }
 
     private void init() {

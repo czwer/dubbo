@@ -228,6 +228,7 @@ public class ReferenceBean<T>
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        logger.info("自定义日志【重要】---服务消费者的初始化配置工作开始（Spring完成Bean属性注入后触发:afterPropertiesSet）:" + this.id);
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 
         // pre init xml reference bean or @DubboReference annotation
@@ -271,6 +272,7 @@ public class ReferenceBean<T>
 
         this.referenceBeanManager = beanFactory.getBean(ReferenceBeanManager.BEAN_NAME, ReferenceBeanManager.class);
         referenceBeanManager.addReference(this);
+        logger.info("自定义日志【重要】--- 服务消费者的初始化配置工作完成（Spring完成Bean属性注入后触发:afterPropertiesSet）:" + this.id);
     }
 
     private ConfigurableListableBeanFactory getBeanFactory() {
@@ -348,7 +350,7 @@ public class ReferenceBean<T>
      * Create lazy proxy for reference.
      */
     private void createLazyProxy() {
-
+        logger.info("自定义日志---ReferenceBean创建代理对像，referenceBeanName：" + this.id);
         // set proxy interfaces
         // see also: org.apache.dubbo.rpc.proxy.AbstractProxyFactory.getProxy(org.apache.dubbo.rpc.Invoker<T>, boolean)
         List<Class<?>> interfaces = new ArrayList<>();
@@ -380,6 +382,7 @@ public class ReferenceBean<T>
     }
 
     private void generateFromJavassistFirst(List<Class<?>> interfaces) {
+        logger.info("自定义日志---ReferenceBean创建Javassist代理对像，referenceBeanName：" + this.id);
         try {
             this.lazyProxy = Proxy.getProxy(interfaces.toArray(new Class[0]))
                     .newInstance(new LazyTargetInvocationHandler(new DubboReferenceLazyInitTargetSource()));
@@ -418,6 +421,7 @@ public class ReferenceBean<T>
     }
 
     private void generateFromJdk(List<Class<?>> interfaces) {
+        logger.info("自定义日志---ReferenceBean创建JDK代理对像，referenceBeanName：" + this.id);
         try {
             this.lazyProxy = java.lang.reflect.Proxy.newProxyInstance(
                     beanClassLoader,

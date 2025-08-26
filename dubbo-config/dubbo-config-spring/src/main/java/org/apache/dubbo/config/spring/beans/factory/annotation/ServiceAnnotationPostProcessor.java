@@ -162,6 +162,7 @@ public class ServiceAnnotationPostProcessor
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        logger.info("自定义日志---确认需要扫描的包路径（Spring完成Bean属性注入后触发:afterPropertiesSet）：" + String.join(",", packagesToScan));
         this.resolvedPackagesToScan = resolvePackagesToScan(packagesToScan);
     }
 

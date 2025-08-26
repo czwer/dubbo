@@ -64,6 +64,7 @@ public class ReferenceBeanManager implements ApplicationContextAware {
 
     public void addReference(ReferenceBean referenceBean) throws Exception {
         String referenceBeanName = referenceBean.getId();
+        logger.info("自定义日志---Dubbo注册ReferenceBean，referenceBeanName：" + referenceBeanName);
         Assert.notEmptyString(referenceBeanName, "The id of ReferenceBean cannot be empty");
 
         if (!initialized) {
@@ -163,7 +164,7 @@ public class ReferenceBeanManager implements ApplicationContextAware {
      * @throws Exception
      */
     public synchronized void initReferenceBean(ReferenceBean referenceBean) throws Exception {
-
+        logger.info("自定义日志---初始化ReferenceBean：" + referenceBean.getId());
         if (referenceBean.getReferenceConfig() != null) {
             return;
         }

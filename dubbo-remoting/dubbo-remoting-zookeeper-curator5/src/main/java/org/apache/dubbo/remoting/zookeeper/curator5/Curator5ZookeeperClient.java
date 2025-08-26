@@ -119,6 +119,7 @@ public class Curator5ZookeeperClient
 
     @Override
     public void createPersistent(String path, boolean faultTolerant) {
+        logger.info("自定义日志---通过zookeeper客户端curator创建持久节点:" + path);
         try {
             client.create().forPath(path);
         } catch (NodeExistsException e) {
@@ -133,6 +134,7 @@ public class Curator5ZookeeperClient
 
     @Override
     public void createEphemeral(String path, boolean faultTolerant) {
+        logger.info("自定义日志---通过zookeeper客户端curator创建临时节点:" + path);
         try {
             client.create().withMode(CreateMode.EPHEMERAL).forPath(path);
         } catch (NodeExistsException e) {
@@ -155,6 +157,7 @@ public class Curator5ZookeeperClient
 
     @Override
     protected void createPersistent(String path, String data, boolean faultTolerant) {
+        logger.info("自定义日志---通过zookeeper客户端curator创建持久节点:" + path);
         byte[] dataBytes = data.getBytes(CHARSET);
         try {
             client.create().forPath(path, dataBytes);
@@ -177,6 +180,7 @@ public class Curator5ZookeeperClient
 
     @Override
     protected void createEphemeral(String path, String data, boolean faultTolerant) {
+        logger.info("自定义日志---通过zookeeper客户端curator创建临时节点:" + path);
         byte[] dataBytes = data.getBytes(CHARSET);
         try {
             client.create().withMode(CreateMode.EPHEMERAL).forPath(path, dataBytes);

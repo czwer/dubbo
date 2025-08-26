@@ -113,6 +113,7 @@ public class ServiceBean<T> extends ServiceConfig<T>
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        logger.info("自定义日志【重要】---服务暴露前的配置准备工作开始（Spring完成Bean属性注入后触发:afterPropertiesSet）:" + beanName);
         if (StringUtils.isEmpty(getPath())) {
             if (StringUtils.isNotEmpty(getInterface())) {
                 setPath(getInterface());
@@ -122,6 +123,7 @@ public class ServiceBean<T> extends ServiceConfig<T>
         ModuleModel moduleModel = DubboBeanUtils.getModuleModel(applicationContext);
         moduleModel.getConfigManager().addService(this);
         moduleModel.getDeployer().setPending();
+        logger.info("自定义日志【重要】---服务暴露前的配置准备工作完成（Spring完成Bean属性注入后触发:afterPropertiesSet）:" + beanName);
     }
 
     /**

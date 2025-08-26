@@ -150,6 +150,7 @@ public class DubboDeployApplicationListener
 
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
+        logger.info("自定义日志---监听到ApplicationContextEvent事件");
         if (nullSafeEquals(applicationContext, event.getSource())) {
             if (event instanceof ContextRefreshedEvent) {
                 onContextRefreshedEvent((ContextRefreshedEvent) event);
@@ -160,13 +161,16 @@ public class DubboDeployApplicationListener
     }
 
     private void onContextRefreshedEvent(ContextRefreshedEvent event) {
+        logger.info("自定义日志---监听到ContextRefreshedEvent事件");
         ModuleDeployer deployer = moduleModel.getDeployer();
         Assert.notNull(deployer, "Module deployer is null");
         Object singletonMutex = LockUtils.getSingletonMutex(applicationContext);
         // start module
         Future future = null;
         synchronized (singletonMutex) {
+            logger.info("自定义日志【重要】---服务导出与引用开始");
             future = deployer.start();
+            logger.info("自定义日志【重要】---服务导出与引用完成");
         }
 
         // if the module does not start in background, await finish
@@ -191,6 +195,7 @@ public class DubboDeployApplicationListener
     }
 
     private void onContextClosedEvent(ContextClosedEvent event) {
+        logger.info("自定义日志---监听到ContextClosedEvent事件");
         try {
             Object value = moduleModel.getAttribute(ModelConstants.KEEP_RUNNING_ON_SPRING_CLOSED);
             if (value == null) {

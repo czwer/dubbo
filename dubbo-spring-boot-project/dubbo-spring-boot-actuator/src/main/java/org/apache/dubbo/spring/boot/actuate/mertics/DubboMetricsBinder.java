@@ -20,11 +20,15 @@ import org.apache.dubbo.metrics.MetricsGlobalRegistry;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.ApplicationListener;
 
 public class DubboMetricsBinder implements ApplicationListener<ApplicationStartedEvent>, DisposableBean {
+    private static final Logger logger = LoggerFactory.getLogger(DubboMetricsBinder.class);
+
     private final MeterRegistry meterRegistry;
 
     public DubboMetricsBinder(MeterRegistry meterRegistry) {
@@ -33,6 +37,7 @@ public class DubboMetricsBinder implements ApplicationListener<ApplicationStarte
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
+        logger.info("自定义日志---监听到ApplicationStartedEvent事件");
         if (meterRegistry instanceof CompositeMeterRegistry) {
             MetricsGlobalRegistry.setCompositeRegistry((CompositeMeterRegistry) meterRegistry);
         } else {

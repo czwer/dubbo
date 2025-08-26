@@ -17,16 +17,21 @@
 package org.apache.dubbo.config.spring;
 
 import org.apache.dubbo.common.deploy.DeployState;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.spring.context.event.DubboApplicationStateEvent;
 
 import org.springframework.context.ApplicationListener;
 
 public class DubboStateListener implements ApplicationListener<DubboApplicationStateEvent> {
 
+    private static final Logger logger = LoggerFactory.getLogger(DubboStateListener.class);
+
     private DeployState state;
 
     @Override
     public void onApplicationEvent(DubboApplicationStateEvent event) {
+        logger.info("自定义日志---监听到DubboApplicationStateEvent事件");
         state = event.getState();
     }
 

@@ -133,6 +133,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
 
     @Override
     public void destroy() {
+        logger.info("自定义日志---zookeeper registry 销毁");
         super.destroy();
 
         // remove child listener
@@ -170,6 +171,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
 
     @Override
     public void doRegister(URL url) {
+        logger.info("自定义日志---通过zookeeper服务注册:" + url.getServiceKey());
         try {
             checkDestroyed();
             zkClient.create(toUrlPath(url), url.getParameter(DYNAMIC_KEY, true), true);
@@ -181,6 +183,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
 
     @Override
     public void doUnregister(URL url) {
+        logger.info("自定义日志---通过zookeeper取消服务注册:" + url.getServiceKey());
         try {
             checkDestroyed();
             zkClient.delete(toUrlPath(url));
@@ -192,6 +195,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
 
     @Override
     public void doSubscribe(final URL url, final NotifyListener listener) {
+        logger.info("自定义日志---通过zookeeper订阅服务:" + url.getServiceKey());
         try {
             checkDestroyed();
             if (ANY_VALUE.equals(url.getServiceInterface())) {
@@ -289,6 +293,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
 
     @Override
     public void doUnsubscribe(URL url, NotifyListener listener) {
+        logger.info("自定义日志---通过zookeeper取消订阅服务:" + url.getServiceKey());
         super.doUnsubscribe(url, listener);
         checkDestroyed();
         ConcurrentMap<NotifyListener, ChildListener> listeners = zkListeners.get(url);

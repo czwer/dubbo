@@ -40,11 +40,13 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.LINE_SEPARATOR;
 @Order(Ordered.HIGHEST_PRECEDENCE + 20 + 1) // After LoggingApplicationListener#DEFAULT_ORDER
 public class WelcomeLogoApplicationListener implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {
 
+    private static final Logger logger = LoggerFactory.getLogger(WelcomeLogoApplicationListener.class);
+
     private static AtomicBoolean processed = new AtomicBoolean(false);
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-
+        logger.info("自定义日志---监听到ApplicationEnvironmentPreparedEvent事件");
         // Skip if processed before, prevent duplicated execution in Hierarchical ApplicationContext
         if (processed.get()) {
             return;

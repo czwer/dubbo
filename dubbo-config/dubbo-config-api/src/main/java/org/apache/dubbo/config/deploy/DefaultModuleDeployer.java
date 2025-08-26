@@ -438,18 +438,24 @@ public class DefaultModuleDeployer extends AbstractDeployer<ModuleModel> impleme
     }
 
     private void exportServices() {
+        logger.info("自定义日志【重要】---服务导出开始");
         for (ServiceConfigBase sc : configManager.getServices()) {
+            logger.info("自定义日志【重要】---服务导出中：" + sc.getUniqueServiceName());
             exportServiceInternal(sc);
         }
+        logger.info("自定义日志【重要】---服务导出完成");
     }
 
     private void registerServices() {
+        logger.info("自定义日志【重要】---服务注册开始");
         for (ServiceConfigBase sc : configManager.getServices()) {
             if (!Boolean.FALSE.equals(sc.isRegister())) {
+                logger.info("自定义日志【重要】---服务注册中：" + sc.getUniqueServiceName());
                 registerServiceInternal(sc);
             }
         }
         applicationDeployer.refreshServiceInstance();
+        logger.info("自定义日志【重要】---服务注册完成");
     }
 
     private void checkReferences() {
