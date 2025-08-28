@@ -187,7 +187,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
         try {
             // this is an early event, it will be notified at
             // org.springframework.context.support.AbstractApplicationContext.registerListeners()
-            logger.info("自定义日志---发布DubboConfigInitEvent事件");
+            logger.info("自定义日志---发布事件：DubboConfigInitEvent");
             applicationContext.publishEvent(new DubboConfigInitEvent(applicationContext));
         } catch (Exception e) {
             // if spring version is less than 4.2, it does not support early application event
@@ -392,6 +392,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
                 // associate fieldElement and reference bean
                 fieldElement.injectedObject = referenceBeanName;
                 injectedFieldReferenceBeanCache.put(fieldElement, referenceBeanName);
+                logger.info("自定义日志---@DubboReference/@Reference注解的属性字段，关联referenceBean：" + referenceBeanName);
             }
 
             for (AnnotatedMethodElement methodElement : metadata.getMethodElements()) {
@@ -406,6 +407,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
                 // associate methodElement and reference bean
                 methodElement.injectedObject = referenceBeanName;
                 injectedMethodReferenceBeanCache.put(methodElement, referenceBeanName);
+                logger.info("自定义日志---@DubboReference/@Reference注解的方法，关联referenceBean：" + referenceBeanName);
             }
         } catch (ClassNotFoundException e) {
             throw new BeanCreationException("prepare reference annotation failed", e);
