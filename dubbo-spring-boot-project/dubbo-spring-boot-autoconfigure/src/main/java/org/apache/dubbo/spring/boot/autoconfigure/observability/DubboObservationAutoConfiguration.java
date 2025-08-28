@@ -97,7 +97,7 @@ public class DubboObservationAutoConfiguration
 
     @Override
     public void onApplicationEvent(DubboConfigInitEvent event) {
-        logger.info("自定义日志---监听到DubboConfigInitEvent事件");
+        logger.info("自定义日志---监听到事件：DubboConfigInitEvent");
         try {
             applicationModel
                     .getBeanFactory()

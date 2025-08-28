@@ -37,7 +37,7 @@ public class DubboMetricsBinder implements ApplicationListener<ApplicationStarte
 
     @Override
     public void onApplicationEvent(ApplicationStartedEvent applicationStartedEvent) {
-        logger.info("自定义日志---监听到ApplicationStartedEvent事件");
+        logger.info("自定义日志---监听到事件：ApplicationStartedEvent");
         if (meterRegistry instanceof CompositeMeterRegistry) {
             MetricsGlobalRegistry.setCompositeRegistry((CompositeMeterRegistry) meterRegistry);
         } else {

@@ -139,18 +139,18 @@ public class DubboDeployApplicationListener
     }
 
     private void publishModuleEvent(DeployState state) {
-        logger.info("自定义日志---发布DubboModuleStateEvent事件");
+        logger.info("自定义日志---发布事件：DubboModuleStateEvent");
         applicationContext.publishEvent(new DubboModuleStateEvent(moduleModel, state));
     }
 
     private void publishModuleEvent(DeployState state, Throwable cause) {
-        logger.info("自定义日志---发布DubboModuleStateEvent事件");
+        logger.info("自定义日志---发布事件：DubboModuleStateEvent");
         applicationContext.publishEvent(new DubboModuleStateEvent(moduleModel, state, cause));
     }
 
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
-        logger.info("自定义日志---监听到ApplicationContextEvent事件");
+        logger.info("自定义日志---监听到事件：ApplicationContextEvent");
         if (nullSafeEquals(applicationContext, event.getSource())) {
             if (event instanceof ContextRefreshedEvent) {
                 onContextRefreshedEvent((ContextRefreshedEvent) event);
@@ -161,7 +161,7 @@ public class DubboDeployApplicationListener
     }
 
     private void onContextRefreshedEvent(ContextRefreshedEvent event) {
-        logger.info("自定义日志---监听到ContextRefreshedEvent事件");
+        logger.info("自定义日志---监听到事件：ContextRefreshedEvent");
         ModuleDeployer deployer = moduleModel.getDeployer();
         Assert.notNull(deployer, "Module deployer is null");
         Object singletonMutex = LockUtils.getSingletonMutex(applicationContext);
@@ -195,7 +195,7 @@ public class DubboDeployApplicationListener
     }
 
     private void onContextClosedEvent(ContextClosedEvent event) {
-        logger.info("自定义日志---监听到ContextClosedEvent事件");
+        logger.info("自定义日志---监听到事件：ContextClosedEvent");
         try {
             Object value = moduleModel.getAttribute(ModelConstants.KEEP_RUNNING_ON_SPRING_CLOSED);
             if (value == null) {

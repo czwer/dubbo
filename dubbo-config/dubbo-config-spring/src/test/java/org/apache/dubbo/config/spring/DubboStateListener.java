@@ -31,7 +31,7 @@ public class DubboStateListener implements ApplicationListener<DubboApplicationS
 
     @Override
     public void onApplicationEvent(DubboApplicationStateEvent event) {
-        logger.info("自定义日志---监听到DubboApplicationStateEvent事件");
+        logger.info("自定义日志---监听到事件：DubboApplicationStateEvent");
         state = event.getState();
     }
 

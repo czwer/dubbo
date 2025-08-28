@@ -79,7 +79,7 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     public void onApplicationEvent(ApplicationEvent event) {
         if (isOriginalEventSource(event)) {
             if (event instanceof DubboConfigInitEvent) {
-                logger.info("自定义日志---监听到DubboConfigInitEvent事件");
+                logger.info("自定义日志---监听到事件：DubboConfigInitEvent");
                 // This event will be notified at AbstractApplicationContext.registerListeners(),
                 // init dubbo config beans before spring singleton beans
                 initDubboConfigBeans();
@@ -106,7 +106,7 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     }
 
     private void onApplicationContextEvent(ApplicationContextEvent event) {
-        logger.info("自定义日志---监听到ApplicationContextEvent事件");
+        logger.info("自定义日志---监听到事件：ApplicationContextEvent");
         if (DubboBootstrapStartStopListenerSpringAdapter.applicationContext == null) {
             DubboBootstrapStartStopListenerSpringAdapter.applicationContext = event.getApplicationContext();
         }
@@ -119,14 +119,14 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     }
 
     private void onContextRefreshedEvent(ContextRefreshedEvent event) {
-        logger.info("自定义日志---监听到ContextRefreshedEvent事件");
+        logger.info("自定义日志---监听到事件：ContextRefreshedEvent");
         if (bootstrap.getTakeoverMode() == BootstrapTakeoverMode.SPRING) {
             moduleModel.getDeployer().start();
         }
     }
 
     private void onContextClosedEvent(ContextClosedEvent event) {
-        logger.info("自定义日志---监听到ContextClosedEvent事件");
+        logger.info("自定义日志---监听到事件：ContextClosedEvent");
         if (bootstrap.getTakeoverMode() == BootstrapTakeoverMode.SPRING) {
             // will call dubboBootstrap.stop() through shutdown callback.
             // bootstrap.getApplicationModel().getBeanFactory().getBean(DubboShutdownHook.class).run();

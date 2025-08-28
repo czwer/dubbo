@@ -152,7 +152,7 @@ public class ServiceBean<T> extends ServiceConfig<T>
      */
     private void publishExportEvent() {
         ServiceBeanExportedEvent exportEvent = new ServiceBeanExportedEvent(this);
-        logger.info("自定义日志---发布ServiceBeanExportedEvent事件");
+        logger.info("自定义日志---发布事件：ServiceBeanExportedEvent");
         applicationEventPublisher.publishEvent(exportEvent);
     }
 
