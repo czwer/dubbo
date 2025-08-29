@@ -228,6 +228,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
     @Override
     @Transient
     public T get(boolean check) {
+        logger.info("自定义日志【重要】---获取远程代理对象：" + this.interfaceClass.getName());
         if (destroyed) {
             throw new IllegalStateException("The invoker of ReferenceConfig(" + url + ") has already destroyed!");
         }
@@ -488,6 +489,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
 
     @SuppressWarnings({"unchecked"})
     private T createProxy(Map<String, String> referenceParameters) {
+        logger.info("自定义日志【重要】---创建远程代理对象中，该代理可以透明地调用远程服务：" + this.interfaceClass.getName());
         urls.clear();
 
         meshModeHandleUrl(referenceParameters);
