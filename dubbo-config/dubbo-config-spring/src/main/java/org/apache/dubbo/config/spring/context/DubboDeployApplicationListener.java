@@ -150,11 +150,12 @@ public class DubboDeployApplicationListener
 
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
-        logger.info("自定义日志---监听到事件：ApplicationContextEvent");
         if (nullSafeEquals(applicationContext, event.getSource())) {
             if (event instanceof ContextRefreshedEvent) {
+                logger.info("自定义日志---监听到事件：ApplicationContextEvent(ContextRefreshedEvent)");
                 onContextRefreshedEvent((ContextRefreshedEvent) event);
             } else if (event instanceof ContextClosedEvent) {
+                logger.info("自定义日志---监听到事件：ApplicationContextEvent(ContextClosedEvent)");
                 onContextClosedEvent((ContextClosedEvent) event);
             }
         }

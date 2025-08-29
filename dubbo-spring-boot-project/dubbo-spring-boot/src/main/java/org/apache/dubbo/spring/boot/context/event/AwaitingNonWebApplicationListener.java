@@ -95,10 +95,12 @@ public class AwaitingNonWebApplicationListener implements SmartApplicationListen
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ApplicationReadyEvent) {
+            logger.info("自定义日志---监听到事件：ApplicationEvent(ApplicationReadyEvent)");
             onApplicationReadyEvent((ApplicationReadyEvent) event);
         }
 
         if (event instanceof ApplicationFailedEvent) {
+            logger.info("自定义日志---监听到事件：ApplicationEvent(ApplicationFailedEvent)");
             awaitAndRelease(((ApplicationFailedEvent) event).getApplicationContext());
         }
     }
