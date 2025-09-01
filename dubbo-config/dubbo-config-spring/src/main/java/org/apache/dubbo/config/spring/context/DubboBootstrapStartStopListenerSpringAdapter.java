@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.context;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.bootstrap.DubboBootstrap;
 import org.apache.dubbo.config.bootstrap.DubboBootstrapStartStopListener;
 import org.apache.dubbo.config.spring.context.event.DubboBootstrapStatedEvent;
@@ -30,12 +32,13 @@ import org.springframework.context.ApplicationContext;
  */
 @Deprecated
 public class DubboBootstrapStartStopListenerSpringAdapter implements DubboBootstrapStartStopListener {
-
+    private static final Logger logger = LoggerFactory.getLogger(DubboBootstrapStartStopListenerSpringAdapter.class);
     static ApplicationContext applicationContext;
 
     @Override
     public void onStart(DubboBootstrap bootstrap) {
         if (applicationContext != null) {
+            logger.info("自定义日志---发布事件：DubboBootstrapStatedEvent");
             applicationContext.publishEvent(new DubboBootstrapStatedEvent(bootstrap));
         }
     }
@@ -43,6 +46,7 @@ public class DubboBootstrapStartStopListenerSpringAdapter implements DubboBootst
     @Override
     public void onStop(DubboBootstrap bootstrap) {
         if (applicationContext != null) {
+            logger.info("自定义日志---发布事件：DubboBootstrapStopedEvent");
             applicationContext.publishEvent(new DubboBootstrapStopedEvent(bootstrap));
         }
     }

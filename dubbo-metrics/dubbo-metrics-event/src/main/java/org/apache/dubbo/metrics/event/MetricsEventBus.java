@@ -41,6 +41,7 @@ public class MetricsEventBus {
         if (event == null || event.getSource() == null) {
             return;
         }
+        logger.info("自定义日志---发布事件：MetricsEvent");
         MetricsEventMulticaster dispatcher = event.getMetricsEventMulticaster();
         Optional.ofNullable(dispatcher).ifPresent(d -> {
             tryInvoke(() -> d.publishEvent(event));
@@ -110,6 +111,7 @@ public class MetricsEventBus {
         MetricsEventMulticaster dispatcher = validate(event);
 
         if (dispatcher == null) return;
+        logger.info("自定义日志---发布事件：MetricsEvent");
         tryInvoke(() -> dispatcher.publishEvent(event));
     }
 

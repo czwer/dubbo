@@ -54,7 +54,7 @@ public class DubboConfigBeanDefinitionConflictApplicationListener
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        logger.info("自定义日志---监听到事件：ContextRefreshedEvent");
+        logger.info("自定义日志---监听到事件：ContextRefreshedEvent，timestamp：" + event.getTimestamp());
         ApplicationContext applicationContext = event.getApplicationContext();
         BeanDefinitionRegistry registry = getBeanDefinitionRegistry(applicationContext);
         resolveUniqueApplicationConfigBean(registry, applicationContext);

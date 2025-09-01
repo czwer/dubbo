@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.metrics.listener;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.metrics.event.MetricsEvent;
 import org.apache.dubbo.metrics.event.MetricsEventBus;
 import org.apache.dubbo.metrics.event.TimeCounterEvent;
@@ -30,7 +32,7 @@ import java.util.function.Consumer;
  */
 public abstract class AbstractMetricsKeyListener extends AbstractMetricsListener<TimeCounterEvent>
         implements MetricsLifeListener<TimeCounterEvent> {
-
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMetricsKeyListener.class);
     private final MetricsKey metricsKey;
 
     public AbstractMetricsKeyListener(MetricsKey metricsKey) {
@@ -53,6 +55,7 @@ public abstract class AbstractMetricsKeyListener extends AbstractMetricsListener
         return new AbstractMetricsKeyListener(metricsKey) {
             @Override
             public void onEvent(TimeCounterEvent event) {
+                logger.info("自定义日志---监听到事件：TimeCounterEvent");
                 postFunc.accept(event);
             }
         };

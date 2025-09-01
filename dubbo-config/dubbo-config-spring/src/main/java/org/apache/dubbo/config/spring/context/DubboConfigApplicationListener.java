@@ -55,7 +55,7 @@ public class DubboConfigApplicationListener
 
     @Override
     public void onApplicationEvent(DubboConfigInitEvent event) {
-        logger.info("自定义日志---监听到事件：DubboConfigInitEvent");
+        logger.info("自定义日志---监听到事件：DubboConfigInitEvent，timestamp：" + event.getTimestamp());
         if (nullSafeEquals(applicationContext, event.getSource())) {
             init();
         }

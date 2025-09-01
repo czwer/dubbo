@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.metrics.collector;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.metrics.data.BaseStatComposite;
 import org.apache.dubbo.metrics.event.MetricsEventMulticaster;
 import org.apache.dubbo.metrics.event.TimeCounterEvent;
@@ -33,6 +35,7 @@ import static org.apache.dubbo.metrics.MetricsConstants.SELF_INCREMENT_SIZE;
 
 public abstract class CombMetricsCollector<E extends TimeCounterEvent> extends AbstractMetricsListener<E>
         implements ApplicationMetricsCollector<E>, ServiceMetricsCollector<E>, MethodMetricsCollector<E> {
+    private static final Logger logger = LoggerFactory.getLogger(CombMetricsCollector.class);
 
     protected final BaseStatComposite stats;
     private MetricsEventMulticaster eventMulticaster;
@@ -103,6 +106,7 @@ public abstract class CombMetricsCollector<E extends TimeCounterEvent> extends A
 
     @Override
     public void onEvent(TimeCounterEvent event) {
+        logger.info("自定义日志---监听到事件：TimeCounterEvent");
         eventMulticaster.publishEvent(event);
     }
 

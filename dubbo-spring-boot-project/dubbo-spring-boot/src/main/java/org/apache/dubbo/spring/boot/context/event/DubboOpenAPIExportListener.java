@@ -39,7 +39,7 @@ public class DubboOpenAPIExportListener implements ApplicationListener<Applicati
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        logger.info("自定义日志---监听到事件：ApplicationReadyEvent");
+        logger.info("自定义日志---监听到事件：ApplicationReadyEvent，timestamp：" + event.getTimestamp());
         if (!exported.compareAndSet(false, true)) {
             return;
         }

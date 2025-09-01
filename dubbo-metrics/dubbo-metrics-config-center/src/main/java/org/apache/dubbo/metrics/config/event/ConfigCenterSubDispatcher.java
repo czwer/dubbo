@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.metrics.config.event;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.metrics.config.collector.ConfigCenterMetricsCollector;
 import org.apache.dubbo.metrics.event.MetricsEvent;
 import org.apache.dubbo.metrics.event.SimpleMetricsEventMulticaster;
@@ -30,6 +32,7 @@ import static org.apache.dubbo.metrics.config.ConfigCenterMetricsConstants.ATTAC
 import static org.apache.dubbo.metrics.config.ConfigCenterMetricsConstants.ATTACHMENT_KEY_CONFIG_PROTOCOL;
 
 public final class ConfigCenterSubDispatcher extends SimpleMetricsEventMulticaster {
+    private static final Logger logger = LoggerFactory.getLogger(ConfigCenterSubDispatcher.class);
 
     public ConfigCenterSubDispatcher(ConfigCenterMetricsCollector collector) {
 
@@ -41,6 +44,7 @@ public final class ConfigCenterSubDispatcher extends SimpleMetricsEventMulticast
 
             @Override
             public void onEvent(TimeCounterEvent event) {
+                logger.info("自定义日志---监听到事件：TimeCounterEvent");
                 collector.increase(
                         event.getAttachmentValue(ATTACHMENT_KEY_CONFIG_FILE),
                         event.getAttachmentValue(ATTACHMENT_KEY_CONFIG_GROUP),
