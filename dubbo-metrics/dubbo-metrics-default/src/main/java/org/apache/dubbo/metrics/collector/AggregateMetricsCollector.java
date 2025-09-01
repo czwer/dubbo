@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.metrics.collector;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.ConcurrentHashMapUtils;
 import org.apache.dubbo.config.MetricsConfig;
 import org.apache.dubbo.config.context.ConfigManager;
@@ -58,6 +60,8 @@ import static org.apache.dubbo.metrics.model.MetricsCategory.RT;
  * This collector only enabled when metrics aggregation config is enabled.
  */
 public class AggregateMetricsCollector implements MetricsCollector<RequestEvent> {
+    private static final Logger logger = LoggerFactory.getLogger(AggregateMetricsCollector.class);
+
     private int bucketNum = DEFAULT_BUCKET_NUM;
     private int timeWindowSeconds = DEFAULT_TIME_WINDOW_SECONDS;
     private int qpsTimeWindowMillSeconds = DEFAULT_QPS_TIME_WINDOW_MILL_SECONDS;
@@ -131,6 +135,7 @@ public class AggregateMetricsCollector implements MetricsCollector<RequestEvent>
 
     @Override
     public void onEvent(RequestEvent event) {
+        logger.info("自定义日志---监听到事件：RequestEvent");
         if (enableQps) {
             MethodMetric metric = calcWindowCounter(event, MetricsKey.METRIC_REQUESTS);
             TimeWindowCounter qpsCounter = qps.get(metric);

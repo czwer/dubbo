@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.metrics.event;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.metrics.listener.MetricsLifeListener;
 import org.apache.dubbo.metrics.listener.MetricsListener;
@@ -29,6 +31,8 @@ import java.util.function.Consumer;
  * A simple event publisher that defines lifecycle events and supports rt events
  */
 public class SimpleMetricsEventMulticaster implements MetricsEventMulticaster {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleMetricsEventMulticaster.class);
+
     private final List<MetricsListener<?>> listeners = Collections.synchronizedList(new ArrayList<>());
 
     @Override
@@ -40,6 +44,7 @@ public class SimpleMetricsEventMulticaster implements MetricsEventMulticaster {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void publishEvent(MetricsEvent event) {
         if (validateIfApplicationConfigExist(event)) return;
+        logger.info("自定义日志---发布事件：MetricsEvent");
         for (MetricsListener listener : listeners) {
             if (listener.isSupport(event)) {
                 listener.onEvent(event);

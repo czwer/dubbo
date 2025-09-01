@@ -46,7 +46,7 @@ public class WelcomeLogoApplicationListener implements ApplicationListener<Appli
 
     @Override
     public void onApplicationEvent(ApplicationEnvironmentPreparedEvent event) {
-        logger.info("自定义日志---监听到事件：ApplicationEnvironmentPreparedEvent");
+        logger.info("自定义日志---监听到事件：ApplicationEnvironmentPreparedEvent，timestamp：" + event.getTimestamp());
         // Skip if processed before, prevent duplicated execution in Hierarchical ApplicationContext
         if (processed.get()) {
             return;

@@ -79,12 +79,13 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     public void onApplicationEvent(ApplicationEvent event) {
         if (isOriginalEventSource(event)) {
             if (event instanceof DubboConfigInitEvent) {
-                logger.info("自定义日志---监听到事件：ApplicationEvent(DubboConfigInitEvent)");
+                logger.info("自定义日志---监听到事件：ApplicationEvent(DubboConfigInitEvent)，timestamp：" + event.getTimestamp());
                 // This event will be notified at AbstractApplicationContext.registerListeners(),
                 // init dubbo config beans before spring singleton beans
                 initDubboConfigBeans();
             } else if (event instanceof ApplicationContextEvent) {
-                logger.info("自定义日志---监听到事件：ApplicationEvent(ApplicationContextEvent)");
+                logger.info(
+                        "自定义日志---监听到事件：ApplicationEvent(ApplicationContextEvent)，timestamp：" + event.getTimestamp());
                 this.onApplicationContextEvent((ApplicationContextEvent) event);
             }
         }
@@ -112,23 +113,24 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
         }
 
         if (event instanceof ContextRefreshedEvent) {
-            logger.info("自定义日志---监听到事件：ApplicationContextEvent(ContextRefreshedEvent)");
+            logger.info(
+                    "自定义日志---监听到事件：ApplicationContextEvent(ContextRefreshedEvent)，timestamp：" + event.getTimestamp());
             onContextRefreshedEvent((ContextRefreshedEvent) event);
         } else if (event instanceof ContextClosedEvent) {
-            logger.info("自定义日志---监听到事件：ApplicationContextEvent(ContextClosedEvent)");
+            logger.info("自定义日志---监听到事件：ApplicationContextEvent(ContextClosedEvent)，timestamp：" + event.getTimestamp());
             onContextClosedEvent((ContextClosedEvent) event);
         }
     }
 
     private void onContextRefreshedEvent(ContextRefreshedEvent event) {
-        logger.info("自定义日志---监听到事件：ContextRefreshedEvent");
+        logger.info("自定义日志---监听到事件：ContextRefreshedEvent，timestamp：" + event.getTimestamp());
         if (bootstrap.getTakeoverMode() == BootstrapTakeoverMode.SPRING) {
             moduleModel.getDeployer().start();
         }
     }
 
     private void onContextClosedEvent(ContextClosedEvent event) {
-        logger.info("自定义日志---监听到事件：ContextClosedEvent");
+        logger.info("自定义日志---监听到事件：ContextClosedEvent，timestamp：" + event.getTimestamp());
         if (bootstrap.getTakeoverMode() == BootstrapTakeoverMode.SPRING) {
             // will call dubboBootstrap.stop() through shutdown callback.
             // bootstrap.getApplicationModel().getBeanFactory().getBean(DubboShutdownHook.class).run();

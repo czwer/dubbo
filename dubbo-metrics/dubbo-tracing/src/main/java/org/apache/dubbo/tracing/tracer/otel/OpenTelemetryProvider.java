@@ -19,6 +19,7 @@ package org.apache.dubbo.tracing.tracer.otel;
 import org.apache.dubbo.common.Version;
 import org.apache.dubbo.common.lang.Nullable;
 import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.ClassUtils;
 import org.apache.dubbo.common.utils.StringUtils;
@@ -196,6 +197,7 @@ public class OpenTelemetryProvider implements TracerProvider {
     }
 
     static class OTelEventPublisher implements OtelTracer.EventPublisher {
+        private static final Logger logger = LoggerFactory.getLogger(OTelEventPublisher.class);
 
         private final List<EventListener> listeners;
 
@@ -205,6 +207,7 @@ public class OpenTelemetryProvider implements TracerProvider {
 
         @Override
         public void publishEvent(Object event) {
+            logger.info("自定义日志---发布事件：" + event.getClass().getName());
             for (EventListener listener : this.listeners) {
                 listener.onEvent(event);
             }

@@ -17,6 +17,8 @@
 package org.apache.dubbo.spring.boot.autoconfigure.observability.otel;
 
 import org.apache.dubbo.common.Version;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.ClassUtils;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboConfigurationProperties;
@@ -296,6 +298,7 @@ public class OpenTelemetryAutoConfiguration {
     }
 
     static class OTelEventPublisher implements io.micrometer.tracing.otel.bridge.OtelTracer.EventPublisher {
+        private static final Logger logger = LoggerFactory.getLogger(OTelEventPublisher.class);
 
         private final List<io.micrometer.tracing.otel.bridge.EventListener> listeners;
 
@@ -305,6 +308,7 @@ public class OpenTelemetryAutoConfiguration {
 
         @Override
         public void publishEvent(Object event) {
+            logger.info("自定义日志---发布事件：" + event.getClass().getName());
             for (io.micrometer.tracing.otel.bridge.EventListener listener : this.listeners) {
                 listener.onEvent(event);
             }

@@ -17,6 +17,8 @@
 package org.apache.dubbo.metrics.event;
 
 import org.apache.dubbo.common.constants.CommonConstants;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.metrics.MetricsConstants;
 import org.apache.dubbo.metrics.collector.DefaultMetricsCollector;
 import org.apache.dubbo.metrics.collector.MethodMetricsCollector;
@@ -34,6 +36,7 @@ import static org.apache.dubbo.metrics.model.key.MetricsKey.METRIC_REQUESTS_SERV
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public final class DefaultSubDispatcher extends SimpleMetricsEventMulticaster {
+    private static final Logger logger = LoggerFactory.getLogger(DefaultSubDispatcher.class);
 
     public DefaultSubDispatcher(DefaultMetricsCollector collector) {
 
@@ -54,6 +57,7 @@ public final class DefaultSubDispatcher extends SimpleMetricsEventMulticaster {
 
             @Override
             public void onEvent(RequestEvent event) {
+                logger.info("自定义日志---监听到事件：RequestEvent");
                 MetricsSupport.increment(
                         METRIC_REQUESTS_SERVICE_UNAVAILABLE_FAILED,
                         dynamicPlaceType,
