@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.actuate.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.actuate.health.DubboHealthIndicator;
 import org.apache.dubbo.spring.boot.actuate.health.DubboHealthIndicatorProperties;
 
@@ -41,10 +43,13 @@ import org.springframework.context.annotation.Configuration;
         havingValue = "true")
 @EnableConfigurationProperties(DubboHealthIndicatorProperties.class)
 public class DubboHealthIndicatorAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboHealthIndicatorAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
     public DubboHealthIndicator dubboHealthIndicator() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboHealthIndicator");
         return new DubboHealthIndicator();
     }
 }

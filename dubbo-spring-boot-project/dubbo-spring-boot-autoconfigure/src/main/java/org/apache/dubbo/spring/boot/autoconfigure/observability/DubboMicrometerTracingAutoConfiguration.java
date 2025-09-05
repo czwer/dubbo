@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure.observability;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboAutoConfiguration;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.annotation.ConditionalOnDubboTracingEnable;
 import org.apache.dubbo.tracing.handler.DubboClientTracingObservationHandler;
@@ -51,6 +53,8 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
         name = "org.springframework.boot.actuate.autoconfigure.tracing.MicrometerTracingAutoConfiguration",
         value = DubboAutoConfiguration.class)
 public class DubboMicrometerTracingAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboMicrometerTracingAutoConfiguration.class);
 
     /**
      * {@code @Order} value of
@@ -69,6 +73,7 @@ public class DubboMicrometerTracingAutoConfiguration {
     @ConditionalOnBean(io.micrometer.tracing.Tracer.class)
     public io.micrometer.tracing.handler.DefaultTracingObservationHandler defaultTracingObservationHandler(
             io.micrometer.tracing.Tracer tracer) {
+        logger.info("自定义日志---@Bean方式声明Bean：DefaultTracingObservationHandler");
         return new io.micrometer.tracing.handler.DefaultTracingObservationHandler(tracer);
     }
 
@@ -78,6 +83,7 @@ public class DubboMicrometerTracingAutoConfiguration {
     @Order(SENDER_TRACING_OBSERVATION_HANDLER_ORDER)
     public PropagatingSenderTracingObservationHandler<?> propagatingSenderTracingObservationHandler(
             Tracer tracer, Propagator propagator) {
+        logger.info("自定义日志---@Bean方式声明Bean：PropagatingSenderTracingObservationHandler");
         return new PropagatingSenderTracingObservationHandler<>(tracer, propagator);
     }
 
@@ -87,6 +93,7 @@ public class DubboMicrometerTracingAutoConfiguration {
     @Order(RECEIVER_TRACING_OBSERVATION_HANDLER_ORDER)
     public PropagatingReceiverTracingObservationHandler<?> propagatingReceiverTracingObservationHandler(
             Tracer tracer, Propagator propagator) {
+        logger.info("自定义日志---@Bean方式声明Bean：PropagatingReceiverTracingObservationHandler");
         return new PropagatingReceiverTracingObservationHandler<>(tracer, propagator);
     }
 
@@ -96,6 +103,7 @@ public class DubboMicrometerTracingAutoConfiguration {
     @Order(SENDER_TRACING_OBSERVATION_HANDLER_ORDER)
     public DubboClientTracingObservationHandler<?> dubboClientTracingObservationHandler(
             io.micrometer.tracing.Tracer tracer) {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboClientTracingObservationHandler");
         return new DubboClientTracingObservationHandler<>(tracer);
     }
 
@@ -105,6 +113,7 @@ public class DubboMicrometerTracingAutoConfiguration {
     @Order(RECEIVER_TRACING_OBSERVATION_HANDLER_ORDER)
     public DubboServerTracingObservationHandler<?> dubboServerTracingObservationHandler(
             io.micrometer.tracing.Tracer tracer) {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboServerTracingObservationHandler");
         return new DubboServerTracingObservationHandler<>(tracer);
     }
 }

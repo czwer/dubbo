@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.protocol.tri.ServletExchanger;
 import org.apache.dubbo.rpc.protocol.tri.servlet.jakarta.TripleFilter;
 import org.apache.dubbo.rpc.protocol.tri.websocket.jakarta.TripleWebSocketFilter;
@@ -39,6 +41,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @Conditional(SpringBoot3Condition.class)
 public class DubboTriple3AutoConfiguration {
+    public static final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(DubboTriple3AutoConfiguration.class);
+
 
     public static final String SERVLET_PREFIX = "dubbo.protocol.triple.servlet";
 
@@ -55,6 +59,7 @@ public class DubboTriple3AutoConfiguration {
                 @Value("${" + SERVLET_PREFIX + ".filter-url-patterns:/*}") String[] urlPatterns,
                 @Value("${" + SERVLET_PREFIX + ".filter-order:-1000000}") int order,
                 @Value("${server.port:8080}") int serverPort) {
+            logger.info("自定义日志---@Bean方式声明Bean：FilterRegistrationBean");
             ServletExchanger.bindServerPort(serverPort);
             FilterRegistrationBean<TripleFilter> registrationBean = new FilterRegistrationBean<>();
             registrationBean.setFilter(new TripleFilter());
@@ -68,6 +73,7 @@ public class DubboTriple3AutoConfiguration {
         @ConditionalOnProperty(prefix = SERVLET_PREFIX, name = "max-concurrent-streams")
         public WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> tripleTomcatHttp2Customizer(
                 @Value("${" + SERVLET_PREFIX + ".max-concurrent-streams}") int maxConcurrentStreams) {
+            logger.info("自定义日志---@Bean方式声明Bean：WebServerFactoryCustomizer");
             return factory -> factory.addConnectorCustomizers(connector -> {
                 ProtocolHandler handler = connector.getProtocolHandler();
                 for (UpgradeProtocol upgradeProtocol : handler.findUpgradeProtocols()) {
@@ -87,12 +93,14 @@ public class DubboTriple3AutoConfiguration {
     @ConditionalOnWebApplication(type = Type.SERVLET)
     @ConditionalOnProperty(prefix = WEBSOCKET_PREFIX, name = "enabled", havingValue = "true")
     public static class TripleWebSocketConfiguration {
+        public static final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(TripleWebSocketConfiguration.class);
 
         @Bean
         public FilterRegistrationBean<TripleWebSocketFilter> tripleWebSocketFilter(
                 @Value("${" + WEBSOCKET_PREFIX + ".filter-url-patterns:/*}") String[] urlPatterns,
                 @Value("${" + WEBSOCKET_PREFIX + ".filter-order:-1000000}") int order,
                 @Value("${server.port:8080}") int serverPort) {
+            logger.info("自定义日志---@Bean方式声明Bean：FilterRegistrationBean");
             ServletExchanger.bindServerPort(serverPort);
             FilterRegistrationBean<TripleWebSocketFilter> registrationBean = new FilterRegistrationBean<>();
             registrationBean.setFilter(new TripleWebSocketFilter());

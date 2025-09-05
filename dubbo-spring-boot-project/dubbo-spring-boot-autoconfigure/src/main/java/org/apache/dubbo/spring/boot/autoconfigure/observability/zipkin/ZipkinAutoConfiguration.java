@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure.observability.zipkin;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.annotation.ConditionalOnDubboTracingEnable;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.zipkin.ZipkinConfigurations.BraveConfiguration;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.zipkin.ZipkinConfigurations.OpenTelemetryConfiguration;
@@ -60,11 +62,14 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 })
 @ConditionalOnDubboTracingEnable
 public class ZipkinAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ZipkinAutoConfiguration.class);
 
     @Bean
     @ConditionalOnProperty(prefix = DUBBO_TRACING_ZIPKIN_CONFIG_PREFIX, name = "endpoint")
     @ConditionalOnMissingBean
     public BytesEncoder<Span> spanBytesEncoder() {
+        logger.info("自定义日志---@Bean方式声明Bean：BytesEncoder<Span>");
         return SpanBytesEncoder.JSON_V2;
     }
 
@@ -72,6 +77,7 @@ public class ZipkinAutoConfiguration {
     @ConditionalOnProperty(prefix = DUBBO_TRACING_ZIPKIN_CONFIG_PREFIX, name = "endpoint")
     @ConditionalOnMissingBean
     public zipkin2.reporter.BytesEncoder<Span> reporterBytesEncoder() {
+        logger.info("自定义日志---@Bean方式声明Bean：zipkin2.reporter.BytesEncoder<Span>");
         return zipkin2.reporter.SpanBytesEncoder.JSON_V2;
     }
 }

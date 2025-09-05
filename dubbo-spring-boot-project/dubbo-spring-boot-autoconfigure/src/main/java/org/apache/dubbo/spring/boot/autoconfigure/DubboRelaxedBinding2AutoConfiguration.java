@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.spring.context.config.ConfigurationBeanBinder;
 import org.apache.dubbo.config.spring.util.PropertySourcesUtils;
 
@@ -56,6 +58,8 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @ConditionalOnClass(name = "org.springframework.boot.context.properties.bind.Binder")
 @AutoConfigureBefore(DubboRelaxedBindingAutoConfiguration.class)
 public class DubboRelaxedBinding2AutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboRelaxedBinding2AutoConfiguration.class);
 
     public PropertyResolver dubboScanBasePackagesPropertyResolver(ConfigurableEnvironment environment) {
         ConfigurableEnvironment propertyResolver = new AbstractEnvironment() {
@@ -81,6 +85,7 @@ public class DubboRelaxedBinding2AutoConfiguration {
     @Bean(name = BASE_PACKAGES_BEAN_NAME)
     public Set<String> dubboBasePackages(ConfigurableEnvironment environment) {
         PropertyResolver propertyResolver = dubboScanBasePackagesPropertyResolver(environment);
+        logger.info("自定义日志---@Bean方式声明Bean：dubboBasePackages是方法名，返回的bean是Set<String>");
         return propertyResolver.getProperty(BASE_PACKAGES_PROPERTY_NAME, Set.class, emptySet());
     }
 
@@ -88,6 +93,7 @@ public class DubboRelaxedBinding2AutoConfiguration {
     @Bean(RELAXED_DUBBO_CONFIG_BINDER_BEAN_NAME)
     @Scope(scopeName = SCOPE_PROTOTYPE)
     public ConfigurationBeanBinder relaxedDubboConfigBinder() {
+        logger.info("自定义日志---@Bean方式声明Bean：BinderDubboConfigBinder");
         return new BinderDubboConfigBinder();
     }
 }

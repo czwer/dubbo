@@ -17,6 +17,7 @@
 package org.apache.dubbo.spring.boot.autoconfigure.observability.otel;
 
 import org.apache.dubbo.common.Version;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.ClassUtils;
@@ -60,7 +61,8 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
         })
 @EnableConfigurationProperties(DubboConfigurationProperties.class)
 public class OpenTelemetryAutoConfiguration {
-
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(OpenTelemetryAutoConfiguration.class);
     /**
      * Default value for application name if {@code spring.application.name} is not set.
      */
@@ -77,6 +79,7 @@ public class OpenTelemetryAutoConfiguration {
     io.opentelemetry.api.OpenTelemetry openTelemetry(
             io.opentelemetry.sdk.trace.SdkTracerProvider sdkTracerProvider,
             io.opentelemetry.context.propagation.ContextPropagators contextPropagators) {
+        logger.info("自定义日志---@Bean方式声明Bean：OpenTelemetry");
         return io.opentelemetry.sdk.OpenTelemetrySdk.builder()
                 .setTracerProvider(sdkTracerProvider)
                 .setPropagators(contextPropagators)
@@ -89,6 +92,7 @@ public class OpenTelemetryAutoConfiguration {
             Environment environment,
             ObjectProvider<io.opentelemetry.sdk.trace.SpanProcessor> spanProcessors,
             io.opentelemetry.sdk.trace.samplers.Sampler sampler) {
+        logger.info("自定义日志---@Bean方式声明Bean：SdkTracerProvider");
         String applicationName = dubboConfigProperties.getApplication().getName();
         if (StringUtils.isBlank(applicationName)) {
             applicationName = environment.getProperty("spring.application.name", DEFAULT_APPLICATION_NAME);
@@ -125,6 +129,7 @@ public class OpenTelemetryAutoConfiguration {
     @ConditionalOnMissingBean
     io.opentelemetry.context.propagation.ContextPropagators otelContextPropagators(
             ObjectProvider<io.opentelemetry.context.propagation.TextMapPropagator> textMapPropagators) {
+        logger.info("自定义日志---@Bean方式声明Bean：ContextPropagators");
         return io.opentelemetry.context.propagation.ContextPropagators.create(
                 io.opentelemetry.context.propagation.TextMapPropagator.composite(
                         textMapPropagators.orderedStream().collect(Collectors.toList())));
@@ -133,6 +138,7 @@ public class OpenTelemetryAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     io.opentelemetry.sdk.trace.samplers.Sampler otelSampler() {
+        logger.info("自定义日志---@Bean方式声明Bean：Sampler");
         io.opentelemetry.sdk.trace.samplers.Sampler rootSampler =
                 io.opentelemetry.sdk.trace.samplers.Sampler.traceIdRatioBased(
                         this.dubboConfigProperties.getTracing().getSampling().getProbability());
@@ -146,6 +152,7 @@ public class OpenTelemetryAutoConfiguration {
             ObjectProvider<io.micrometer.tracing.exporter.SpanExportingPredicate> spanExportingPredicates,
             ObjectProvider<io.micrometer.tracing.exporter.SpanReporter> spanReporters,
             ObjectProvider<io.micrometer.tracing.exporter.SpanFilter> spanFilters) {
+        logger.info("自定义日志---@Bean方式声明Bean：SpanProcessor");
         return io.opentelemetry.sdk.trace.export.BatchSpanProcessor.builder(
                         new io.micrometer.tracing.otel.bridge.CompositeSpanExporter(
                                 spanExporters.orderedStream().collect(Collectors.toList()),
@@ -158,6 +165,7 @@ public class OpenTelemetryAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     io.opentelemetry.api.trace.Tracer otelTracer(io.opentelemetry.api.OpenTelemetry openTelemetry) {
+        logger.info("自定义日志---@Bean方式声明Bean：Tracer");
         return openTelemetry.getTracer("org.apache.dubbo", Version.getVersion());
     }
 
@@ -167,6 +175,7 @@ public class OpenTelemetryAutoConfiguration {
             io.opentelemetry.api.trace.Tracer tracer,
             io.micrometer.tracing.otel.bridge.OtelTracer.EventPublisher eventPublisher,
             io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext otelCurrentTraceContext) {
+        logger.info("自定义日志---@Bean方式声明Bean：OtelTracer");
         return new io.micrometer.tracing.otel.bridge.OtelTracer(
                 tracer,
                 otelCurrentTraceContext,
@@ -182,6 +191,7 @@ public class OpenTelemetryAutoConfiguration {
     io.micrometer.tracing.otel.bridge.OtelPropagator otelPropagator(
             io.opentelemetry.context.propagation.ContextPropagators contextPropagators,
             io.opentelemetry.api.trace.Tracer tracer) {
+        logger.info("自定义日志---@Bean方式声明Bean：OtelPropagator");
         return new io.micrometer.tracing.otel.bridge.OtelPropagator(contextPropagators, tracer);
     }
 
@@ -189,6 +199,7 @@ public class OpenTelemetryAutoConfiguration {
     @ConditionalOnMissingBean
     io.micrometer.tracing.otel.bridge.OtelTracer.EventPublisher otelTracerEventPublisher(
             List<io.micrometer.tracing.otel.bridge.EventListener> eventListeners) {
+        logger.info("自定义日志---@Bean方式声明Bean：EventPublisher");
         return new OTelEventPublisher(eventListeners);
     }
 
@@ -196,6 +207,7 @@ public class OpenTelemetryAutoConfiguration {
     @ConditionalOnMissingBean
     io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext otelCurrentTraceContext(
             io.micrometer.tracing.otel.bridge.OtelTracer.EventPublisher publisher) {
+        logger.info("自定义日志---@Bean方式声明Bean：OtelCurrentTraceContext");
         io.opentelemetry.context.ContextStorage.addWrapper(
                 new io.micrometer.tracing.otel.bridge.EventPublishingContextWrapper(publisher));
         return new io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext();
@@ -204,12 +216,14 @@ public class OpenTelemetryAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     io.micrometer.tracing.otel.bridge.Slf4JEventListener otelSlf4JEventListener() {
+        logger.info("自定义日志---@Bean方式声明Bean：Slf4JEventListener");
         return new io.micrometer.tracing.otel.bridge.Slf4JEventListener();
     }
 
     @Bean
     @ConditionalOnMissingBean(io.micrometer.tracing.SpanCustomizer.class)
     io.micrometer.tracing.otel.bridge.OtelSpanCustomizer otelSpanCustomizer() {
+        logger.info("自定义日志---@Bean方式声明Bean：OtelSpanCustomizer");
         return new io.micrometer.tracing.otel.bridge.OtelSpanCustomizer();
     }
 
@@ -233,6 +247,7 @@ public class OpenTelemetryAutoConfiguration {
         @ConditionalOnClass(name = {"io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext"})
         io.opentelemetry.context.propagation.TextMapPropagator w3cTextMapPropagatorWithBaggage(
                 io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext otelCurrentTraceContext) {
+            logger.info("自定义日志---@Bean方式声明Bean：TextMapPropagator（w3cTextMapPropagatorWithBaggage）");
             List<String> remoteFields =
                     this.dubboConfigProperties.getTracing().getBaggage().getRemoteFields();
             return io.opentelemetry.context.propagation.TextMapPropagator.composite(
@@ -249,6 +264,7 @@ public class OpenTelemetryAutoConfiguration {
         @ConditionalOnProperty(prefix = ObservabilityUtils.DUBBO_TRACING_PROPAGATION, name = "type", havingValue = "B3")
         io.opentelemetry.context.propagation.TextMapPropagator b3BaggageTextMapPropagator(
                 io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext otelCurrentTraceContext) {
+            logger.info("自定义日志---@Bean方式声明Bean：TextMapPropagator（b3BaggageTextMapPropagator）");
             List<String> remoteFields =
                     this.dubboConfigProperties.getTracing().getBaggage().getRemoteFields();
             return io.opentelemetry.context.propagation.TextMapPropagator.composite(
@@ -266,6 +282,7 @@ public class OpenTelemetryAutoConfiguration {
                 name = "enabled",
                 matchIfMissing = true)
         io.micrometer.tracing.otel.bridge.Slf4JBaggageEventListener otelSlf4JBaggageEventListener() {
+            logger.info("自定义日志---@Bean方式声明Bean：Slf4JBaggageEventListener");
             return new io.micrometer.tracing.otel.bridge.Slf4JBaggageEventListener(this.dubboConfigProperties
                     .getTracing()
                     .getBaggage()
@@ -282,6 +299,7 @@ public class OpenTelemetryAutoConfiguration {
         @ConditionalOnMissingBean
         @ConditionalOnProperty(prefix = ObservabilityUtils.DUBBO_TRACING_PROPAGATION, name = "type", havingValue = "B3")
         io.opentelemetry.extension.trace.propagation.B3Propagator b3TextMapPropagator() {
+            logger.info("自定义日志---@Bean方式声明Bean：B3Propagator");
             return io.opentelemetry.extension.trace.propagation.B3Propagator.injectingSingleHeader();
         }
 
@@ -293,6 +311,7 @@ public class OpenTelemetryAutoConfiguration {
                 havingValue = "W3C",
                 matchIfMissing = true)
         io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator w3cTextMapPropagatorWithoutBaggage() {
+            logger.info("自定义日志---@Bean方式声明Bean：W3CTraceContextPropagator");
             return io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator.getInstance();
         }
     }

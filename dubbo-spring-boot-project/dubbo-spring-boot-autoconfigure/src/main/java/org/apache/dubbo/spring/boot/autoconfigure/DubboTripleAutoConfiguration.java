@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.protocol.tri.ServletExchanger;
 import org.apache.dubbo.rpc.protocol.tri.servlet.TripleFilter;
 import org.apache.dubbo.rpc.protocol.tri.websocket.TripleWebSocketFilter;
@@ -40,6 +42,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 @Conditional(SpringBoot12Condition.class)
 public class DubboTripleAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboTripleAutoConfiguration.class);
 
     public static final String SERVLET_PREFIX = "dubbo.protocol.triple.servlet";
 
@@ -61,6 +65,7 @@ public class DubboTripleAutoConfiguration {
             registrationBean.setFilter(new TripleFilter());
             registrationBean.addUrlPatterns(urlPatterns);
             registrationBean.setOrder(order);
+            logger.info("自定义日志---@Bean方式声明Bean：FilterRegistrationBean");
             return registrationBean;
         }
 
@@ -69,6 +74,7 @@ public class DubboTripleAutoConfiguration {
         @ConditionalOnProperty(prefix = SERVLET_PREFIX, name = "max-concurrent-streams")
         public WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> tripleTomcatHttp2Customizer(
                 @Value("${" + SERVLET_PREFIX + ".max-concurrent-streams}") int maxConcurrentStreams) {
+            logger.info("自定义日志---@Bean方式声明Bean：WebServerFactoryCustomizer");
             return factory -> factory.addConnectorCustomizers(connector -> {
                 ProtocolHandler handler = connector.getProtocolHandler();
                 for (UpgradeProtocol upgradeProtocol : handler.findUpgradeProtocols()) {
@@ -99,6 +105,7 @@ public class DubboTripleAutoConfiguration {
             registrationBean.setFilter(new TripleWebSocketFilter());
             registrationBean.addUrlPatterns(urlPatterns);
             registrationBean.setOrder(order);
+            logger.info("自定义日志---@Bean方式声明Bean：FilterRegistrationBean");
             return registrationBean;
         }
     }

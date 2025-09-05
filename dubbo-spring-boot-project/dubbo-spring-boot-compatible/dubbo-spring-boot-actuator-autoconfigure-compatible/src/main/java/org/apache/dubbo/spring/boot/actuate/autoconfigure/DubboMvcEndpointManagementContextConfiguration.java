@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.actuate.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.actuate.endpoint.DubboEndpoint;
 import org.apache.dubbo.spring.boot.actuate.endpoint.mvc.DubboMvcEndpoint;
 
@@ -36,11 +38,14 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnClass(name = {"org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter"})
 @ConditionalOnWebApplication
 public class DubboMvcEndpointManagementContextConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboMvcEndpointManagementContextConfiguration.class);
 
     @Bean
     @ConditionalOnBean(DubboEndpoint.class)
     @ConditionalOnMissingBean
     public DubboMvcEndpoint dubboMvcEndpoint(DubboEndpoint dubboEndpoint) {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboMvcEndpoint");
         return new DubboMvcEndpoint(dubboEndpoint);
     }
 }

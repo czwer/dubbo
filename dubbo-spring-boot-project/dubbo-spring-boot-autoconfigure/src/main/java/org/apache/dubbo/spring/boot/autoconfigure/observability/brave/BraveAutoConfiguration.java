@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure.observability.brave;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboConfigurationProperties;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.DubboMicrometerTracingAutoConfiguration;
@@ -57,6 +59,7 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 @EnableConfigurationProperties(DubboConfigurationProperties.class)
 @ConditionalOnDubboTracingEnable
 public class BraveAutoConfiguration {
+    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(BraveAutoConfiguration.class);
 
     private static final io.micrometer.tracing.brave.bridge.BraveBaggageManager BRAVE_BAGGAGE_MANAGER =
             new io.micrometer.tracing.brave.bridge.BraveBaggageManager();
@@ -79,6 +82,7 @@ public class BraveAutoConfiguration {
             ObjectProvider<io.micrometer.tracing.exporter.SpanExportingPredicate> predicates,
             ObjectProvider<io.micrometer.tracing.exporter.SpanReporter> reporters,
             ObjectProvider<io.micrometer.tracing.exporter.SpanFilter> filters) {
+        logger.info("自定义日志---@Bean方式声明Bean：CompositeSpanHandler");
         return new io.micrometer.tracing.brave.bridge.CompositeSpanHandler(
                 predicates.orderedStream().collect(Collectors.toList()),
                 reporters.orderedStream().collect(Collectors.toList()),
@@ -94,6 +98,7 @@ public class BraveAutoConfiguration {
             brave.propagation.CurrentTraceContext currentTraceContext,
             brave.propagation.Propagation.Factory propagationFactory,
             brave.sampler.Sampler sampler) {
+        logger.info("自定义日志---@Bean方式声明Bean：Tracing");
         String applicationName = dubboConfigProperties.getApplication().getName();
         if (StringUtils.isBlank(applicationName)) {
             applicationName = environment.getProperty("spring.application.name", DEFAULT_APPLICATION_NAME);
@@ -115,6 +120,7 @@ public class BraveAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public brave.Tracer braveTracer(brave.Tracing tracing) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.Tracer");
         return tracing.tracer();
     }
 
@@ -123,6 +129,7 @@ public class BraveAutoConfiguration {
     public brave.propagation.CurrentTraceContext braveCurrentTraceContext(
             List<brave.propagation.CurrentTraceContext.ScopeDecorator> scopeDecorators,
             List<brave.propagation.CurrentTraceContextCustomizer> currentTraceContextCustomizers) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.propagation");
         brave.propagation.ThreadLocalCurrentTraceContext.Builder builder =
                 brave.propagation.ThreadLocalCurrentTraceContext.newBuilder();
         scopeDecorators.forEach(builder::addScopeDecorator);
@@ -136,6 +143,7 @@ public class BraveAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public brave.sampler.Sampler braveSampler(DubboConfigurationProperties properties) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.sampler.Sampler");
         return brave.sampler.Sampler.create(
                 properties.getTracing().getSampling().getProbability());
     }
@@ -144,6 +152,7 @@ public class BraveAutoConfiguration {
     @ConditionalOnMissingBean(io.micrometer.tracing.Tracer.class)
     io.micrometer.tracing.brave.bridge.BraveTracer braveTracerBridge(
             brave.Tracer tracer, brave.propagation.CurrentTraceContext currentTraceContext) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.bridge.BraveTracer");
         return new io.micrometer.tracing.brave.bridge.BraveTracer(
                 tracer,
                 new io.micrometer.tracing.brave.bridge.BraveCurrentTraceContext(currentTraceContext),
@@ -153,28 +162,34 @@ public class BraveAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     io.micrometer.tracing.brave.bridge.BravePropagator bravePropagator(brave.Tracing tracing) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.bridge.BravePropagator");
         return new io.micrometer.tracing.brave.bridge.BravePropagator(tracing);
     }
 
     @Bean
     @ConditionalOnMissingBean(brave.SpanCustomizer.class)
     brave.CurrentSpanCustomizer currentSpanCustomizer(brave.Tracing tracing) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.CurrentSpanCustomizer");
         return brave.CurrentSpanCustomizer.create(tracing);
     }
 
     @Bean
     @ConditionalOnMissingBean(io.micrometer.tracing.SpanCustomizer.class)
     io.micrometer.tracing.brave.bridge.BraveSpanCustomizer braveSpanCustomizer(brave.SpanCustomizer spanCustomizer) {
+        logger.info("自定义日志---@Bean方式声明Bean：brave.bridge.BraveSpanCustomizer");
         return new io.micrometer.tracing.brave.bridge.BraveSpanCustomizer(spanCustomizer);
     }
 
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnProperty(value = ObservabilityUtils.DUBBO_TRACING_BAGGAGE_ENABLED, havingValue = "false")
     static class BraveNoBaggageConfiguration {
+        private final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(BraveNoBaggageConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean
         brave.propagation.Propagation.Factory propagationFactory(DubboConfigurationProperties tracing) {
+            logger.info("自定义日志---@Bean方式声明Bean：brave.propagation.Propagation.Factory");
             String type = tracing.getTracing().getPropagation().getType();
             switch (type) {
                 case org.apache.dubbo.config.nested.PropagationConfig.B3:
@@ -192,6 +207,9 @@ public class BraveAutoConfiguration {
     @ConditionalOnProperty(value = ObservabilityUtils.DUBBO_TRACING_BAGGAGE_ENABLED, matchIfMissing = true)
     @Configuration(proxyBeanMethods = false)
     static class BraveBaggageConfiguration {
+        private final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(BraveBaggageConfiguration.class);
+
         private final DubboConfigurationProperties dubboConfigProperties;
 
         public BraveBaggageConfiguration(DubboConfigurationProperties dubboConfigProperties) {
@@ -206,6 +224,8 @@ public class BraveAutoConfiguration {
                 havingValue = "B3")
         brave.baggage.BaggagePropagation.FactoryBuilder b3PropagationFactoryBuilder(
                 ObjectProvider<brave.baggage.BaggagePropagationCustomizer> baggagePropagationCustomizers) {
+            logger.info(
+                    "自定义日志---@Bean方式声明Bean：brave.baggage.BaggagePropagation.FactoryBuilder（b3PropagationFactoryBuilder）");
             brave.propagation.Propagation.Factory delegate = brave.propagation.B3Propagation.newFactoryBuilder()
                     .injectFormat(brave.propagation.B3Propagation.Format.SINGLE_NO_PARENT)
                     .build();
@@ -225,6 +245,9 @@ public class BraveAutoConfiguration {
                 matchIfMissing = true)
         brave.baggage.BaggagePropagation.FactoryBuilder w3cPropagationFactoryBuilder(
                 ObjectProvider<brave.baggage.BaggagePropagationCustomizer> baggagePropagationCustomizers) {
+            logger.info(
+                    "自定义日志---@Bean方式声明Bean：brave.baggage.BaggagePropagation.FactoryBuilder（w3cPropagationFactoryBuilder）");
+
             brave.propagation.Propagation.Factory delegate = new io.micrometer.tracing.brave.bridge.W3CPropagation(
                     BRAVE_BAGGAGE_MANAGER, Collections.emptyList());
 
@@ -238,6 +261,7 @@ public class BraveAutoConfiguration {
         @ConditionalOnMissingBean
         @Order(0)
         brave.baggage.BaggagePropagationCustomizer remoteFieldsBaggagePropagationCustomizer() {
+            logger.info("自定义日志---@Bean方式声明Bean：brave.baggage.BaggagePropagationCustomizer");
             return (builder) -> {
                 List<String> remoteFields =
                         dubboConfigProperties.getTracing().getBaggage().getRemoteFields();
@@ -252,6 +276,7 @@ public class BraveAutoConfiguration {
         @ConditionalOnMissingBean
         brave.propagation.Propagation.Factory propagationFactory(
                 brave.baggage.BaggagePropagation.FactoryBuilder factoryBuilder) {
+            logger.info("自定义日志---@Bean方式声明Bean：brave.propagation.Propagation.Factory");
             return factoryBuilder.build();
         }
 
@@ -259,6 +284,7 @@ public class BraveAutoConfiguration {
         @ConditionalOnMissingBean
         brave.baggage.CorrelationScopeDecorator.Builder mdcCorrelationScopeDecoratorBuilder(
                 ObjectProvider<brave.baggage.CorrelationScopeCustomizer> correlationScopeCustomizers) {
+            logger.info("自定义日志---@Bean方式声明Bean：brave.baggage.CorrelationScopeDecorator.Builder");
             brave.baggage.CorrelationScopeDecorator.Builder builder =
                     brave.context.slf4j.MDCScopeDecorator.newBuilder();
             correlationScopeCustomizers.orderedStream().forEach((customizer) -> customizer.customize(builder));
@@ -273,6 +299,7 @@ public class BraveAutoConfiguration {
                 matchIfMissing = true)
         @ConditionalOnMissingBean
         brave.baggage.CorrelationScopeCustomizer correlationFieldsCorrelationScopeCustomizer() {
+            logger.info("自定义日志---@Bean方式声明Bean：brave.baggage.CorrelationScopeCustomizer");
             return (builder) -> {
                 List<String> correlationFields = this.dubboConfigProperties
                         .getTracing()
@@ -292,6 +319,7 @@ public class BraveAutoConfiguration {
         @ConditionalOnMissingBean(brave.propagation.CurrentTraceContext.ScopeDecorator.class)
         brave.propagation.CurrentTraceContext.ScopeDecorator correlationScopeDecorator(
                 brave.baggage.CorrelationScopeDecorator.Builder builder) {
+            logger.info("自定义日志---@Bean方式声明Bean：brave.propagation.CurrentTraceContext.ScopeDecorator");
             return builder.build();
         }
     }

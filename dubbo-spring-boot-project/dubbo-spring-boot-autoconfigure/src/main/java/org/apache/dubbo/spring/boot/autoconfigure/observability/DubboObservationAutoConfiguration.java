@@ -19,7 +19,6 @@ package org.apache.dubbo.spring.boot.autoconfigure.observability;
 import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.spring.context.event.DubboConfigInitEvent;
-import org.apache.dubbo.qos.protocol.QosProtocolWrapper;
 import org.apache.dubbo.rpc.model.ApplicationModel;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.annotation.ConditionalOnDubboTracingEnable;
 
@@ -63,7 +62,8 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 @ConditionalOnClass(name = {"io.micrometer.observation.Observation", "io.micrometer.tracing.Tracer"})
 public class DubboObservationAutoConfiguration
         implements BeanFactoryAware, ApplicationListener<DubboConfigInitEvent>, Ordered {
-    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(QosProtocolWrapper.class);
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboObservationAutoConfiguration.class);
 
     public DubboObservationAutoConfiguration(ApplicationModel applicationModel) {
         this.applicationModel = applicationModel;
@@ -77,6 +77,7 @@ public class DubboObservationAutoConfiguration
     @ConditionalOnMissingBean
     @ConditionalOnClass(name = "io.micrometer.observation.ObservationRegistry")
     ObservationRegistry observationRegistry() {
+        logger.info("自定义日志---@Bean方式声明Bean：ObservationRegistry");
         return ObservationRegistry.create();
     }
 
@@ -87,6 +88,7 @@ public class DubboObservationAutoConfiguration
     public ObservationRegistryPostProcessor dubboObservationRegistryPostProcessor(
             ObjectProvider<ObservationHandlerGrouping> observationHandlerGrouping,
             ObjectProvider<io.micrometer.observation.ObservationHandler<?>> observationHandlers) {
+        logger.info("自定义日志---@Bean方式声明Bean：ObservationRegistryPostProcessor");
         return new ObservationRegistryPostProcessor(observationHandlerGrouping, observationHandlers);
     }
 
@@ -122,10 +124,13 @@ public class DubboObservationAutoConfiguration
     @ConditionalOnMissingBean(
             type = "org.springframework.boot.actuate.autoconfigure.observation.ObservationRegistryPostProcessor")
     static class OnlyMetricsConfiguration {
+        private final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(OnlyMetricsConfiguration.class);
 
         @Bean
         @ConditionalOnClass(name = "io.micrometer.core.instrument.observation.MeterObservationHandler")
         ObservationHandlerGrouping metricsObservationHandlerGrouping() {
+            logger.info("自定义日志---@Bean方式声明Bean：ObservationHandlerGrouping（metricsObservationHandlerGrouping）");
             return new ObservationHandlerGrouping(MeterObservationHandler.class);
         }
     }
@@ -136,10 +141,13 @@ public class DubboObservationAutoConfiguration
     @ConditionalOnMissingBean(
             type = "org.springframework.boot.actuate.autoconfigure.observation.ObservationRegistryPostProcessor")
     static class OnlyTracingConfiguration {
+        private final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(OnlyTracingConfiguration.class);
 
         @Bean
         @ConditionalOnClass(name = "io.micrometer.tracing.handler.TracingObservationHandler")
         ObservationHandlerGrouping tracingObservationHandlerGrouping() {
+            logger.info("自定义日志---@Bean方式声明Bean：ObservationHandlerGrouping（tracingObservationHandlerGrouping）");
             return new ObservationHandlerGrouping(TracingObservationHandler.class);
         }
     }
@@ -149,6 +157,8 @@ public class DubboObservationAutoConfiguration
     @ConditionalOnMissingBean(
             type = "org.springframework.boot.actuate.autoconfigure.observation.ObservationRegistryPostProcessor")
     static class MetricsWithTracingConfiguration {
+        private final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(MetricsWithTracingConfiguration.class);
 
         @Bean
         @ConditionalOnClass(
@@ -157,6 +167,8 @@ public class DubboObservationAutoConfiguration
                     "io.micrometer.core.instrument.observation.MeterObservationHandler"
                 })
         ObservationHandlerGrouping metricsAndTracingObservationHandlerGrouping() {
+            logger.info(
+                    "自定义日志---@Bean方式声明Bean：ObservationHandlerGrouping（metricsAndTracingObservationHandlerGrouping）");
             return new ObservationHandlerGrouping(
                     Arrays.asList(TracingObservationHandler.class, MeterObservationHandler.class));
         }
@@ -170,10 +182,13 @@ public class DubboObservationAutoConfiguration
         @ConditionalOnMissingBean(type = "io.micrometer.tracing.Tracer")
         @Configuration(proxyBeanMethods = false)
         static class OnlyMetricsMeterObservationHandlerConfiguration {
+            private final ErrorTypeAwareLogger logger =
+                    LoggerFactory.getErrorTypeAwareLogger(OnlyMetricsMeterObservationHandlerConfiguration.class);
 
             @Bean
             @ConditionalOnClass(name = {"io.micrometer.core.instrument.observation.DefaultMeterObservationHandler"})
             DefaultMeterObservationHandler defaultMeterObservationHandler(MeterRegistry meterRegistry) {
+                logger.info("自定义日志---@Bean方式声明Bean：DefaultMeterObservationHandler");
                 return new DefaultMeterObservationHandler(meterRegistry);
             }
         }
@@ -181,6 +196,8 @@ public class DubboObservationAutoConfiguration
         @ConditionalOnBean(io.micrometer.tracing.Tracer.class)
         @Configuration(proxyBeanMethods = false)
         static class TracingAndMetricsObservationHandlerConfiguration {
+            private final ErrorTypeAwareLogger logger =
+                    LoggerFactory.getErrorTypeAwareLogger(TracingAndMetricsObservationHandlerConfiguration.class);
 
             @Bean
             @ConditionalOnClass(
@@ -191,6 +208,7 @@ public class DubboObservationAutoConfiguration
                     })
             TracingAwareMeterObservationHandler<Observation.Context> tracingAwareMeterObservationHandler(
                     MeterRegistry meterRegistry, Tracer tracer) {
+                logger.info("自定义日志---@Bean方式声明Bean：TracingAwareMeterObservationHandler");
                 DefaultMeterObservationHandler delegate = new DefaultMeterObservationHandler(meterRegistry);
                 return new TracingAwareMeterObservationHandler<>(delegate, tracer);
             }

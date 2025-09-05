@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.actuate.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.actuate.endpoint.DubboConfigsMetadataEndpoint;
 import org.apache.dubbo.spring.boot.actuate.endpoint.DubboPropertiesMetadataEndpoint;
 import org.apache.dubbo.spring.boot.actuate.endpoint.DubboQosEndpoints;
@@ -47,12 +49,15 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
         name = "Dubbo Endpoints Default Properties",
         value = "classpath:/META-INF/dubbo-endpoints-default.properties")
 public class DubboEndpointAnnotationAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboEndpointAnnotationAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnAvailableEndpoint
     @CompatibleConditionalOnEnabledEndpoint
     public DubboQosEndpoints dubboQosEndpoints() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboQosEndpoints");
         return new DubboQosEndpoints();
     }
 
@@ -61,6 +66,7 @@ public class DubboEndpointAnnotationAutoConfiguration {
     @ConditionalOnAvailableEndpoint
     @CompatibleConditionalOnEnabledEndpoint
     public DubboConfigsMetadataEndpoint dubboConfigsMetadataEndpoint() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboConfigsMetadataEndpoint");
         return new DubboConfigsMetadataEndpoint();
     }
 
@@ -69,6 +75,7 @@ public class DubboEndpointAnnotationAutoConfiguration {
     @ConditionalOnAvailableEndpoint
     @CompatibleConditionalOnEnabledEndpoint
     public DubboPropertiesMetadataEndpoint dubboPropertiesEndpoint() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboPropertiesMetadataEndpoint");
         return new DubboPropertiesMetadataEndpoint();
     }
 
@@ -77,6 +84,7 @@ public class DubboEndpointAnnotationAutoConfiguration {
     @ConditionalOnAvailableEndpoint
     @CompatibleConditionalOnEnabledEndpoint
     public DubboReferencesMetadataEndpoint dubboReferencesMetadataEndpoint() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboReferencesMetadataEndpoint");
         return new DubboReferencesMetadataEndpoint();
     }
 
@@ -85,6 +93,7 @@ public class DubboEndpointAnnotationAutoConfiguration {
     @ConditionalOnAvailableEndpoint
     @CompatibleConditionalOnEnabledEndpoint
     public DubboServicesMetadataEndpoint dubboServicesMetadataEndpoint() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboServicesMetadataEndpoint");
         return new DubboServicesMetadataEndpoint();
     }
 
@@ -93,6 +102,7 @@ public class DubboEndpointAnnotationAutoConfiguration {
     @ConditionalOnAvailableEndpoint
     @CompatibleConditionalOnEnabledEndpoint
     public DubboShutdownEndpoint dubboShutdownEndpoint() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboShutdownEndpoint");
         return new DubboShutdownEndpoint();
     }
 }

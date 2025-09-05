@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.config.spring.beans.factory.annotation.ReferenceAnnotationBeanPostProcessor;
@@ -52,7 +54,8 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_SCAN_PREFIX;
 @AutoConfigureAfter(DubboRelaxedBindingAutoConfiguration.class)
 @EnableDubboConfig
 public class DubboAutoConfiguration {
-
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboAutoConfiguration.class);
     /**
      * Creates {@link ServiceAnnotationPostProcessor} Bean
      *
@@ -73,6 +76,7 @@ public class DubboAutoConfiguration {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        logger.info("自定义日志【重要】---@Bean方式声明Bean：ServiceAnnotationPostProcessor");
         return serviceAnnotationPostProcessor;
     }
 }

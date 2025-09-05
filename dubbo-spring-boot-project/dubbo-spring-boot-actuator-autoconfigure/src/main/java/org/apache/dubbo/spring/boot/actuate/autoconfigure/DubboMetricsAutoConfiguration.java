@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.actuate.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.actuate.mertics.DubboMetricsBinder;
 
 import io.micrometer.core.instrument.MeterRegistry;
@@ -35,11 +37,14 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 @ConditionalOnWebApplication
 @AutoConfigureAfter(CompositeMeterRegistryAutoConfiguration.class)
 public class DubboMetricsAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboMetricsAutoConfiguration.class);
+
     @Bean
     @ConditionalOnBean({MeterRegistry.class})
     @ConditionalOnMissingBean({DubboMetricsBinder.class})
     public DubboMetricsBinder dubboMetricsBinder(MeterRegistry meterRegistry) {
-
+        logger.info("自定义日志---@Bean方式声明Bean：DubboMetricsBinder");
         return new DubboMetricsBinder(meterRegistry);
     }
 }

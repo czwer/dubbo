@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.actuate.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.spring.boot.actuate.endpoint.DubboEndpoint;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboAutoConfiguration;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboRelaxedBindingAutoConfiguration;
@@ -45,11 +47,14 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 @AutoConfigureAfter(value = {DubboAutoConfiguration.class, DubboRelaxedBindingAutoConfiguration.class})
 @EnableConfigurationProperties(DubboEndpoint.class)
 public class DubboEndpointAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboEndpointAutoConfiguration.class);
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnEnabledEndpoint(value = "dubbo")
     public DubboEndpoint dubboEndpoint() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboEndpoint");
         return new DubboEndpoint();
     }
 }

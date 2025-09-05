@@ -162,18 +162,24 @@ public class ServiceAnnotationPostProcessor
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        logger.info("自定义日志---确认需要扫描的包路径（Spring完成Bean属性注入后触发:afterPropertiesSet）：" + String.join(",", packagesToScan));
+        logger.info("自定义日志---确认需要扫描的包路径（afterPropertiesSet）：" + String.join(",", packagesToScan));
         this.resolvedPackagesToScan = resolvePackagesToScan(packagesToScan);
     }
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        logger.info(
+                "自定义日志---触发扫描指定包路径下所有标注了Dubbo服务注解（如 @DubboService）的类，并将其注册为Spring BeanDefinition。（ postProcessBeanDefinitionRegistry）："
+                        + String.join(",", resolvedPackagesToScan));
         this.registry = registry;
         scanServiceBeans(resolvedPackagesToScan, registry);
     }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        logger.info(
+                "自定义日志---确保所有标注了 @DubboService（或历史版本的 @Service）注解的服务类都能被正确识别并封装成 Dubbo的ServiceBean，为后续的服务导出做准备（ postProcessBeanFactory）："
+                        + String.join(",", resolvedPackagesToScan));
         if (this.registry == null) {
             // In spring 3.x, may be not call postProcessBeanDefinitionRegistry()
             this.registry = (BeanDefinitionRegistry) beanFactory;

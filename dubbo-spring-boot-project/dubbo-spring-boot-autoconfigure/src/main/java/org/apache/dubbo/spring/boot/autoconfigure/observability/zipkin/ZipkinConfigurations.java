@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure.observability.zipkin;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.nested.ExporterConfig;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboConfigurationProperties;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.zipkin.customizer.ZipkinRestTemplateBuilderCustomizer;
@@ -64,10 +66,13 @@ class ZipkinConfigurations {
     @ConditionalOnClass(URLConnectionSender.class)
     @EnableConfigurationProperties(DubboConfigurationProperties.class)
     static class UrlConnectionSenderConfiguration {
+        public static final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(UrlConnectionSenderConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean(Sender.class)
         URLConnectionSender urlConnectionSender(DubboConfigurationProperties properties) {
+            logger.info("自定义日志---注册Bean：URLConnectionSender");
             URLConnectionSender.Builder builder = URLConnectionSender.newBuilder();
             ExporterConfig.ZipkinConfig zipkinConfig =
                     properties.getTracing().getTracingExporter().getZipkinConfig();
@@ -82,12 +87,15 @@ class ZipkinConfigurations {
     @ConditionalOnClass(RestTemplate.class)
     @EnableConfigurationProperties(DubboConfigurationProperties.class)
     static class RestTemplateSenderConfiguration {
+        public static final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(RestTemplateSenderConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean(Sender.class)
         ZipkinRestTemplateSender restTemplateSender(
                 DubboConfigurationProperties properties,
                 ObjectProvider<ZipkinRestTemplateBuilderCustomizer> customizers) {
+            logger.info("自定义日志---注册Bean：ZipkinRestTemplateSender");
             ExporterConfig.ZipkinConfig zipkinConfig =
                     properties.getTracing().getTracingExporter().getZipkinConfig();
             RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
@@ -114,11 +122,14 @@ class ZipkinConfigurations {
     @ConditionalOnClass(WebClient.class)
     @EnableConfigurationProperties(DubboConfigurationProperties.class)
     static class WebClientSenderConfiguration {
+        public static final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(WebClientSenderConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean(Sender.class)
         ZipkinWebClientSender webClientSender(
                 DubboConfigurationProperties properties, ObjectProvider<ZipkinWebClientBuilderCustomizer> customizers) {
+            logger.info("自定义日志---注册Bean：ZipkinWebClientSender");
             ExporterConfig.ZipkinConfig zipkinConfig =
                     properties.getTracing().getTracingExporter().getZipkinConfig();
             WebClient.Builder builder = WebClient.builder();
@@ -129,11 +140,14 @@ class ZipkinConfigurations {
 
     @Configuration(proxyBeanMethods = false)
     static class ReporterConfiguration {
+        public static final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(ReporterConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean
         @ConditionalOnBean(Sender.class)
         AsyncReporter<Span> spanReporter(Sender sender, zipkin2.reporter.BytesEncoder<Span> encoder) {
+            logger.info("自定义日志---注册Bean：AsyncReporter<Span>");
             return AsyncReporter.builder(sender).build(encoder);
         }
     }
@@ -141,11 +155,14 @@ class ZipkinConfigurations {
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(ZipkinSpanHandler.class)
     static class BraveConfiguration {
+        public static final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(BraveConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean
         @ConditionalOnBean(Reporter.class)
         ZipkinSpanHandler zipkinSpanHandler(Reporter<Span> spanReporter) {
+            logger.info("自定义日志---注册Bean：ZipkinSpanHandler");
             return (ZipkinSpanHandler)
                     ZipkinSpanHandler.newBuilder(spanReporter).build();
         }
@@ -156,11 +173,14 @@ class ZipkinConfigurations {
     @ConditionalOnProperty(prefix = DUBBO_TRACING_ZIPKIN_CONFIG_PREFIX, name = "endpoint")
     @EnableConfigurationProperties(DubboConfigurationProperties.class)
     static class OpenTelemetryConfiguration {
+        public static final ErrorTypeAwareLogger logger =
+                LoggerFactory.getErrorTypeAwareLogger(OpenTelemetryConfiguration.class);
 
         @Bean
         @ConditionalOnMissingBean
         ZipkinSpanExporter zipkinSpanExporter(
                 DubboConfigurationProperties properties, BytesEncoder<Span> encoder, ObjectProvider<Sender> senders) {
+            logger.info("自定义日志---注册Bean：ZipkinSpanExporter");
             AtomicReference<Sender> senderRef = new AtomicReference<>();
             senders.orderedStream().findFirst().ifPresent(senderRef::set);
             Sender sender = senderRef.get();

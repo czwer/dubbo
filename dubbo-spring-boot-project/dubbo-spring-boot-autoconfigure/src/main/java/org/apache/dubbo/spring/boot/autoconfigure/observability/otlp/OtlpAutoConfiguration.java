@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure.observability.otlp;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.nested.ExporterConfig.OtlpConfig;
 import org.apache.dubbo.spring.boot.autoconfigure.DubboConfigurationProperties;
 import org.apache.dubbo.spring.boot.autoconfigure.observability.annotation.ConditionalOnDubboTracingEnable;
@@ -46,6 +48,8 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 @ConditionalOnDubboTracingEnable
 @EnableConfigurationProperties(DubboConfigurationProperties.class)
 public class OtlpAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(OtlpAutoConfiguration.class);
 
     @Bean
     @ConditionalOnProperty(prefix = DUBBO_TRACING_OTLP_CONFIG_PREFIX, name = "endpoint")
@@ -53,6 +57,7 @@ public class OtlpAutoConfiguration {
             value = OtlpGrpcSpanExporter.class,
             type = "io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter")
     OtlpGrpcSpanExporter otlpGrpcSpanExporter(DubboConfigurationProperties properties) {
+        logger.info("自定义日志---@Bean方式声明Bean：OtlpGrpcSpanExporter");
         OtlpConfig cfg = properties.getTracing().getTracingExporter().getOtlpConfig();
         OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder()
                 .setEndpoint(cfg.getEndpoint())

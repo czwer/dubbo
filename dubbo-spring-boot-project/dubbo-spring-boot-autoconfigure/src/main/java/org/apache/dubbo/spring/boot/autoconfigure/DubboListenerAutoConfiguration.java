@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.autoconfigure;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.rpc.Constants;
 import org.apache.dubbo.spring.boot.context.event.AwaitingNonWebApplicationListener;
 import org.apache.dubbo.spring.boot.context.event.DubboConfigBeanDefinitionConflictApplicationListener;
@@ -36,16 +38,20 @@ import static org.apache.dubbo.spring.boot.util.DubboUtils.DUBBO_PREFIX;
 @ConditionalOnProperty(prefix = DUBBO_PREFIX, name = "enabled", matchIfMissing = true)
 @Configuration
 public class DubboListenerAutoConfiguration {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboListenerAutoConfiguration.class);
 
     @ConditionalOnMissingBean
     @Bean
     public DubboConfigBeanDefinitionConflictApplicationListener dubboConfigBeanDefinitionConflictApplicationListener() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboConfigBeanDefinitionConflictApplicationListener");
         return new DubboConfigBeanDefinitionConflictApplicationListener();
     }
 
     @ConditionalOnMissingBean
     @Bean
     public AwaitingNonWebApplicationListener awaitingNonWebApplicationListener() {
+        logger.info("自定义日志---@Bean方式声明Bean：AwaitingNonWebApplicationListener");
         return new AwaitingNonWebApplicationListener();
     }
 
@@ -53,6 +59,7 @@ public class DubboListenerAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = Constants.H2_SETTINGS_OPENAPI_PREFIX, name = "enabled", havingValue = "true")
     public DubboOpenAPIExportListener dubboOpenAPIExportListener() {
+        logger.info("自定义日志---@Bean方式声明Bean：DubboOpenAPIExportListener");
         return new DubboOpenAPIExportListener();
     }
 }
