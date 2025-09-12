@@ -62,7 +62,7 @@ public class ConfigurationBeanBindingPostProcessor implements BeanPostProcessor,
 
     static final String IGNORE_INVALID_FIELDS_ATTRIBUTE_NAME = "ignoreInvalidFields";
 
-    private final Log log = LogFactory.getLog(getClass());
+    private final Log log = LogFactory.getLog(ConfigurationBeanBindingPostProcessor.class);
 
     private ConfigurableListableBeanFactory beanFactory = null;
 
@@ -74,7 +74,8 @@ public class ConfigurationBeanBindingPostProcessor implements BeanPostProcessor,
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-
+        log.info(
+                "自定义日志---实现BeanPostProcessor：在Spring Bean初始化之前，对Dubbo的配置类Bean（例如ApplicationConfig、RegistryConfig、ProtocolConfig等）进行属性绑定和配置校验");
         BeanDefinition beanDefinition = getNullableBeanDefinition(beanName);
 
         if (isConfigurationBean(bean, beanDefinition)) {
@@ -87,6 +88,7 @@ public class ConfigurationBeanBindingPostProcessor implements BeanPostProcessor,
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        log.info("自定义日志---实现BeanPostProcessor：目前是空方法：" + beanName);
         return bean;
     }
 

@@ -16,6 +16,9 @@
  */
 package org.apache.dubbo.spring.boot.context;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -28,9 +31,13 @@ import org.springframework.core.Ordered;
  */
 public class DubboApplicationContextInitializer implements ApplicationContextInitializer, Ordered {
 
+    private static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboApplicationContextInitializer.class);
+
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         overrideBeanDefinitions(applicationContext);
+        logger.info("自定义日志---目前是空方法");
     }
 
     private void overrideBeanDefinitions(ConfigurableApplicationContext applicationContext) {

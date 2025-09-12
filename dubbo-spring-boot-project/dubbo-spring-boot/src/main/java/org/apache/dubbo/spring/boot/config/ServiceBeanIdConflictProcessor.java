@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.spring.boot.config;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.ServiceConfig;
 import org.apache.dubbo.config.spring.ServiceBean;
 import org.apache.dubbo.config.spring.reference.ReferenceAttributes;
@@ -50,7 +52,8 @@ import static org.springframework.util.ClassUtils.isAssignable;
  */
 public class ServiceBeanIdConflictProcessor
         implements MergedBeanDefinitionPostProcessor, DisposableBean, PriorityOrdered {
-
+    private static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ServiceBeanIdConflictProcessor.class);
     /**
      * The key is the class names of interfaces that were exported by {@link ServiceBean}
      * The value is bean names of {@link ServiceBean} or {@link ServiceConfig}.
@@ -85,6 +88,8 @@ public class ServiceBeanIdConflictProcessor
             if (isConflictedServiceConfig(serviceConfig)) {
                 // Set id as the bean name
                 serviceConfig.setId(beanName);
+                logger.info("自定义日志---实现BeanPostProcessor：专门用于检测和处理Dubbo服务Bean（ServiceBean）在Spring容器中可能存在的 ID 冲突问题："
+                        + beanName);
             }
         }
         return bean;
@@ -96,6 +101,7 @@ public class ServiceBeanIdConflictProcessor
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        logger.info("自定义日志---实现BeanPostProcessor：目前是空方法:" + beanName);
         return bean;
     }
 

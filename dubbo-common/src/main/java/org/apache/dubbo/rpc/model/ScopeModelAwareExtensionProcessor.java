@@ -17,8 +17,13 @@
 package org.apache.dubbo.rpc.model;
 
 import org.apache.dubbo.common.extension.ExtensionPostProcessor;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 
 public class ScopeModelAwareExtensionProcessor implements ExtensionPostProcessor, ScopeModelAccessor {
+    private static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ScopeModelAwareExtensionProcessor.class);
+
     private ScopeModel scopeModel;
     private FrameworkModel frameworkModel;
     private ApplicationModel applicationModel;
@@ -52,16 +57,22 @@ public class ScopeModelAwareExtensionProcessor implements ExtensionPostProcessor
 
     @Override
     public Object postProcessAfterInitialization(Object instance, String name) throws Exception {
+        logger.info("自定义日志---实现ExtensionPostProcessor：为实现了ScopeModelAware接口的Dubbo扩展组件注入相应的ScopeModel实例：" + name);
         if (instance instanceof ScopeModelAware) {
             ScopeModelAware modelAware = (ScopeModelAware) instance;
             modelAware.setScopeModel(scopeModel);
             if (this.moduleModel != null) {
+                logger.info("自定义日志---实现ExtensionPostProcessor：为实现了ScopeModelAware接口的Dubbo扩展组件注入ModuleModel实例：" + name);
                 modelAware.setModuleModel(this.moduleModel);
             }
             if (this.applicationModel != null) {
+                logger.info(
+                        "自定义日志---实现ExtensionPostProcessor：为实现了ScopeModelAware接口的Dubbo扩展组件注入ApplicationModel实例：" + name);
                 modelAware.setApplicationModel(this.applicationModel);
             }
             if (this.frameworkModel != null) {
+                logger.info(
+                        "自定义日志---实现ExtensionPostProcessor：为实现了ScopeModelAware接口的Dubbo扩展组件注入FrameworkModel实例：" + name);
                 modelAware.setFrameworkModel(this.frameworkModel);
             }
         }

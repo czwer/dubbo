@@ -73,7 +73,8 @@ public abstract class AbstractAnnotationBeanPostProcessor
 
     private static final int CACHE_SIZE = Integer.getInteger("", 32);
 
-    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(AbstractAnnotationBeanPostProcessor.class);
 
     private final Class<? extends Annotation>[] annotationTypes;
 
@@ -353,11 +354,13 @@ public abstract class AbstractAnnotationBeanPostProcessor
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        logger.info("自定义日志---实现BeanPostProcessor：目前是空方法：" + beanName);
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        logger.info("自定义日志---实现BeanPostProcessor：目前是空方法：" + beanName);
         return bean;
     }
 

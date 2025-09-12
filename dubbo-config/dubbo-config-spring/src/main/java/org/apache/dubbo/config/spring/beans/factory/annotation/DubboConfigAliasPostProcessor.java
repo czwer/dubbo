@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.beans.factory.annotation;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.AbstractConfig;
 import org.apache.dubbo.config.spring.context.annotation.DubboConfigConfigurationRegistrar;
 import org.apache.dubbo.config.spring.util.BeanRegistrar;
@@ -35,7 +37,8 @@ import static org.springframework.util.StringUtils.hasText;
  * @since 2.7.5
  */
 public class DubboConfigAliasPostProcessor implements BeanDefinitionRegistryPostProcessor, BeanPostProcessor {
-
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboConfigAliasPostProcessor.class);
     /**
      * The bean name of {@link DubboConfigConfigurationRegistrar}
      */
@@ -55,6 +58,7 @@ public class DubboConfigAliasPostProcessor implements BeanDefinitionRegistryPost
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        logger.info("自定义日志---实现BeanPostProcessor：目前是空方法：" + beanName);
         // DO NOTHING
         return bean;
     }
@@ -66,6 +70,7 @@ public class DubboConfigAliasPostProcessor implements BeanDefinitionRegistryPost
             if (hasText(id) // id MUST be present in AbstractConfig
                     && !nullSafeEquals(id, beanName) // id MUST NOT be equal to bean name
                     && !BeanRegistrar.hasAlias(registry, beanName, id)) { // id MUST NOT be present in AliasRegistry
+                logger.info("自定义日志---实现BeanPostProcessor：Bean名称：" + beanName + "注册一个别名：" + id);
                 registry.registerAlias(beanName, id);
             }
         }

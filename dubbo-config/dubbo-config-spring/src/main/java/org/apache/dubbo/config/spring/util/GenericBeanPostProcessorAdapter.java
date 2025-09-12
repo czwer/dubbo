@@ -16,6 +16,9 @@
  */
 package org.apache.dubbo.config.spring.util;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -30,6 +33,8 @@ import org.springframework.util.ClassUtils;
  */
 @SuppressWarnings("unchecked")
 public abstract class GenericBeanPostProcessorAdapter<T> implements BeanPostProcessor {
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(GenericBeanPostProcessorAdapter.class);
 
     private final Class<T> beanType;
 
@@ -42,16 +47,20 @@ public abstract class GenericBeanPostProcessorAdapter<T> implements BeanPostProc
     @Override
     public final Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if (ClassUtils.isAssignableValue(beanType, bean)) {
+            logger.info("自定义日志---实现BeanPostProcessor：作为一个适配器基类，旨在简化其他特定用途的Duboo BeanPostProcessor的实现" + beanName);
             return doPostProcessBeforeInitialization((T) bean, beanName);
         }
+        logger.info("自定义日志---实现BeanPostProcessor：执行的是空方法：" + beanName);
         return bean;
     }
 
     @Override
     public final Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (ClassUtils.isAssignableValue(beanType, bean)) {
+            logger.info("自定义日志---实现BeanPostProcessor：作为一个适配器基类，旨在简化其他特定用途的Duboo BeanPostProcessor的实现" + beanName);
             return doPostProcessAfterInitialization((T) bean, beanName);
         }
+        logger.info("自定义日志---实现BeanPostProcessor：执行的是空方法：" + beanName);
         return bean;
     }
 
