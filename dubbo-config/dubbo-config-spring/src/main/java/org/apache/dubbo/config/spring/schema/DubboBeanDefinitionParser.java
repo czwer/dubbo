@@ -282,6 +282,7 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         }
 
         if (registered) {
+            logger.info("自定义日志---准备注册bean定义：" + beanName);
             parserContext.getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
         return beanDefinition;

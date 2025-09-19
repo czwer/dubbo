@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.test.spring.context;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.spring.context.DubboSpringInitContext;
 import org.apache.dubbo.config.spring.context.DubboSpringInitCustomizer;
 import org.apache.dubbo.rpc.model.FrameworkModel;
@@ -33,6 +35,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class MockSpringInitCustomizer implements DubboSpringInitCustomizer {
+    final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(MockSpringInitCustomizer.class);
 
     private List<DubboSpringInitContext> contexts = new ArrayList<>();
 
@@ -44,6 +47,7 @@ public class MockSpringInitCustomizer implements DubboSpringInitCustomizer {
         AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.rootBeanDefinition(
                         CustomBeanFactoryPostProcessor.class)
                 .getBeanDefinition();
+        logger.info("自定义日志---准备注册bean定义：" + CustomBeanFactoryPostProcessor.class.getName());
         context.getRegistry().registerBeanDefinition(CustomBeanFactoryPostProcessor.class.getName(), beanDefinition);
     }
 

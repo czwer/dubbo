@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.context;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.spring.beans.factory.annotation.ReferenceAnnotationBeanPostProcessor;
 import org.apache.dubbo.config.spring.util.DubboBeanUtils;
 
@@ -33,7 +35,8 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
  *org.springframework.beans.factory.config.ConfigurableListableBeanFactory, java.util.List)
  */
 public class DubboInfraBeanRegisterPostProcessor implements BeanDefinitionRegistryPostProcessor {
-
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboInfraBeanRegisterPostProcessor.class);
     /**
      * The bean name of {@link ReferenceAnnotationBeanPostProcessor}
      */
@@ -43,6 +46,7 @@ public class DubboInfraBeanRegisterPostProcessor implements BeanDefinitionRegist
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        logger.info("自定义日志---把Spring BeanDefinitionRegistry引用设置到DubboInfraBeanRegisterPostProcessor");
         this.registry = registry;
     }
 

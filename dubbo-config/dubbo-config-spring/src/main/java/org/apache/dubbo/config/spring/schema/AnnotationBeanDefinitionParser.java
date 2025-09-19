@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.schema;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.spring.util.SpringCompatUtils;
 
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -34,7 +36,8 @@ import static org.springframework.util.StringUtils.trimArrayElements;
  * @since 2.5.9
  */
 public class AnnotationBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
-
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(AnnotationBeanDefinitionParser.class);
     /**
      * parse
      * <prev>
@@ -53,7 +56,7 @@ public class AnnotationBeanDefinitionParser extends AbstractSingleBeanDefinition
         String[] packagesToScan = trimArrayElements(commaDelimitedListToStringArray(packageToScan));
 
         builder.addConstructorArgValue(packagesToScan);
-
+        logger.info("自定义日志---标识ROLE_INFRASTRUCTURE");
         builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
         /**

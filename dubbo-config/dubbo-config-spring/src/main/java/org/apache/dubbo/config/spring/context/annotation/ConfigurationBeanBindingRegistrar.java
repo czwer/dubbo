@@ -60,7 +60,7 @@ public class ConfigurationBeanBindingRegistrar implements ImportBeanDefinitionRe
 
     private static final String ENABLE_CONFIGURATION_BINDING_CLASS_NAME = ENABLE_CONFIGURATION_BINDING_CLASS.getName();
 
-    private final Log log = LogFactory.getLog(getClass());
+    private final Log log = LogFactory.getLog(ConfigurationBeanBindingRegistrar.class);
 
     private ConfigurableEnvironment environment;
 
@@ -146,7 +146,7 @@ public class ConfigurationBeanBindingRegistrar implements ImportBeanDefinitionRe
         Map<String, Object> subProperties = resolveSubProperties(multiple, beanName, configurationProperties);
 
         initBeanMetadataAttributes(beanDefinition, subProperties, ignoreUnknownFields, ignoreInvalidFields);
-
+        log.info("自定义日志---准备注册bean定义：" + beanName);
         registry.registerBeanDefinition(beanName, beanDefinition);
 
         if (log.isInfoEnabled()) {

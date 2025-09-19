@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.context;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.context.ConfigManager;
 import org.apache.dubbo.config.spring.context.annotation.DubboConfigConfigurationRegistrar;
 import org.apache.dubbo.config.spring.extension.SpringExtensionInjector;
@@ -38,6 +40,7 @@ import org.springframework.core.env.Environment;
 
 public class DubboContextPostProcessor
         implements BeanDefinitionRegistryPostProcessor, ApplicationContextAware, EnvironmentAware {
+    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(DubboContextPostProcessor.class);
 
     /**
      * The bean name of {@link DubboConfigConfigurationRegistrar}
@@ -69,6 +72,7 @@ public class DubboContextPostProcessor
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
+        logger.info("自定义日志---调用DubboSpringInitializer.initialize(),并传递beanDefinitionRegistry");
         DubboSpringInitializer.initialize(beanDefinitionRegistry);
     }
 

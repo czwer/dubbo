@@ -48,6 +48,7 @@ public class DubboConfigAliasPostProcessor implements BeanDefinitionRegistryPost
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        logger.info("自定义日志---把Spring BeanDefinitionRegistry引用设置到DubboConfigAliasPostProcessor");
         this.registry = registry;
     }
 

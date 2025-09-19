@@ -104,7 +104,8 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
      */
     private static final int CACHE_SIZE = Integer.getInteger(BEAN_NAME + ".cache.size", 32);
 
-    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ReferenceAnnotationBeanPostProcessor.class);
 
     private final ConcurrentMap<InjectionMetadata.InjectedElement, String> injectedFieldReferenceBeanCache =
             new ConcurrentHashMap<>(CACHE_SIZE);
@@ -563,7 +564,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
 
         // signal object type since Spring 5.2
         beanDefinition.setAttribute(Constants.OBJECT_TYPE_ATTRIBUTE, interfaceClass);
-
+        logger.info("自定义日志---准备注册bean定义：" + referenceBeanName);
         beanDefinitionRegistry.registerBeanDefinition(referenceBeanName, beanDefinition);
         referenceBeanManager.registerReferenceKeyAndBeanName(referenceKey, referenceBeanName);
         logger.info("Register dubbo reference bean: " + referenceBeanName + " = " + referenceKey + " at " + member);

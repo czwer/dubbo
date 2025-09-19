@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.context.annotation;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.annotation.Service;
 import org.apache.dubbo.config.spring.beans.factory.annotation.ReferenceAnnotationBeanPostProcessor;
 import org.apache.dubbo.config.spring.beans.factory.annotation.ServiceAnnotationPostProcessor;
@@ -50,6 +52,8 @@ import static org.springframework.beans.factory.support.BeanDefinitionBuilder.ro
  * @since 2.5.7
  */
 public class DubboComponentScanRegistrar implements ImportBeanDefinitionRegistrar {
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboComponentScanRegistrar.class);
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
@@ -73,6 +77,7 @@ public class DubboComponentScanRegistrar implements ImportBeanDefinitionRegistra
 
         BeanDefinitionBuilder builder = rootBeanDefinition(SpringCompatUtils.serviceAnnotationPostProcessor());
         builder.addConstructorArgValue(packagesToScan);
+        logger.info("自定义日志---标识ROLE_INFRASTRUCTURE");
         builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
         AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
         BeanDefinitionReaderUtils.registerWithGeneratedName(beanDefinition, registry);

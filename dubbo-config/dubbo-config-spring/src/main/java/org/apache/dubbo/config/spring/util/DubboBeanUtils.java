@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.util;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.context.ConfigManager;
 import org.apache.dubbo.config.spring.beans.factory.annotation.DubboConfigAliasPostProcessor;
 import org.apache.dubbo.config.spring.beans.factory.annotation.ReferenceAnnotationBeanPostProcessor;
@@ -53,6 +55,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * @since 2.7.6
  */
 public interface DubboBeanUtils {
+    final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(DubboBeanUtils.class);
 
     Log log = LogFactory.getLog(DubboBeanUtils.class);
 
@@ -120,6 +123,7 @@ public interface DubboBeanUtils {
 
         if (!beanDefinitionRegistry.containsBeanDefinition(beanName)) {
             RootBeanDefinition beanDefinition = new RootBeanDefinition(beanType);
+            logger.info("自定义日志---标识ROLE_INFRASTRUCTURE，准备注册bean定义：" + beanName);
             beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
             beanDefinitionRegistry.registerBeanDefinition(beanName, beanDefinition);
             registered = true;
@@ -176,7 +180,7 @@ public interface DubboBeanUtils {
                 beanDefinition.getPropertyValues().add(entry.getKey(), entry.getValue());
             }
         }
-
+        logger.info("自定义日志---准备注册bean定义：" + beanName);
         registry.registerBeanDefinition(beanName, beanDefinition);
         return true;
     }
