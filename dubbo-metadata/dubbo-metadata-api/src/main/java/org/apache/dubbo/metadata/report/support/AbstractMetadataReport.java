@@ -88,11 +88,12 @@ public abstract class AbstractMetadataReport implements MetadataReport {
     protected static final int ONE_DAY_IN_MILLISECONDS = 60 * 24 * 60 * 1000;
     private static final int FOUR_HOURS_IN_MILLISECONDS = 60 * 4 * 60 * 1000;
     // Log output
-    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(AbstractMetadataReport.class);
 
     // Local disk cache, where the special key value.registries records the list of metadata centers, and the others are
     // the list of notified service providers
     final Properties properties = new Properties();
+    // 创建线程池
     private final ExecutorService reportCacheExecutor =
             Executors.newFixedThreadPool(1, new NamedThreadFactory("DubboSaveMetadataReport", true));
     final Map<MetadataIdentifier, Object> allMetadataReports = new ConcurrentHashMap<>(4);
@@ -492,7 +493,7 @@ public abstract class AbstractMetadataReport implements MetadataReport {
 
     class MetadataReportRetry {
         protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
-
+        // 创建线程池
         final ScheduledExecutorService retryExecutor =
                 Executors.newScheduledThreadPool(0, new NamedThreadFactory("DubboMetadataReportRetryTimer", true));
         volatile ScheduledFuture retryScheduledFuture;

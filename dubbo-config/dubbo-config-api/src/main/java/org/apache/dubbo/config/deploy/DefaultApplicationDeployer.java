@@ -216,29 +216,39 @@ public class DefaultApplicationDeployer extends AbstractDeployer<ApplicationMode
             if (initialized) {
                 return;
             }
+            logger.info("自定义日志---applicationDeployer的initialize方法：初始化步骤开始");
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用onInitialize");
             onInitialize();
 
             // register shutdown hook
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用registerShutdownHook");
             registerShutdownHook();
 
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用startConfigCenter");
             startConfigCenter();
 
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用loadApplicationConfigs");
             loadApplicationConfigs();
 
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用initModuleDeployers");
             initModuleDeployers();
 
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用initMetricsReporter");
             initMetricsReporter();
 
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用initMetricsService");
             initMetricsService();
 
             // @since 3.2.3
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用initObservationRegistry");
             initObservationRegistry();
 
             // @since 2.7.8
+            logger.info("自定义日志---applicationDeployer的initialize方法：调用startMetadataCenter");
             startMetadataCenter();
 
             initialized = true;
-
+            logger.info("自定义日志---applicationDeployer的initialize方法：初始化步骤结束");
             if (logger.isInfoEnabled()) {
                 logger.info(getIdentifier() + " has been initialized!");
             }
@@ -768,6 +778,7 @@ public class DefaultApplicationDeployer extends AbstractDeployer<ApplicationMode
         // filter and start pending modules, ignore new module during starting, throw exception of module start
         for (ModuleModel moduleModel : applicationModel.getModuleModels()) {
             if (moduleModel.getDeployer().isPending()) {
+                logger.info("自定义日志---调用：moduleModel.getDeployer().start()");
                 moduleModel.getDeployer().start();
             }
         }
@@ -815,6 +826,7 @@ public class DefaultApplicationDeployer extends AbstractDeployer<ApplicationMode
             ModuleDeployer internalModuleDeployer =
                     applicationModel.getInternalModule().getDeployer();
             if (!internalModuleDeployer.isCompletion()) {
+                logger.info("自定义日志---调用：internalModuleDeployer.start()");
                 Future future = internalModuleDeployer.start();
                 // wait for internal module startup
                 try {

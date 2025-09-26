@@ -465,6 +465,7 @@ public class NacosRegistry extends FailbackRegistry {
 
     private void scheduleServiceNamesLookup(final URL url, final NacosAggregateListener listener) {
         if (scheduledExecutorService == null) {
+            logger.info("自定义日志---创建线程池：(Executors.newSingleThreadScheduledExecutor)");
             scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
             scheduledExecutorService.scheduleAtFixedRate(
                     () -> {

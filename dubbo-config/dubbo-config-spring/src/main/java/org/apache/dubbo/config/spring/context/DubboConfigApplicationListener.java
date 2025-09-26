@@ -66,14 +66,15 @@ public class DubboConfigApplicationListener
         // org.springframework.context.support.AbstractApplicationContext.registerListeners(),
         // before loading non-lazy singleton beans. At this moment, all BeanFactoryPostProcessor have been processed,
         if (initialized.compareAndSet(false, true)) {
+            logger.info("自定义日志---开始调用initDubboConfigBeans()方法");
             initDubboConfigBeans();
         }
     }
 
     private void initDubboConfigBeans() {
-        logger.info("自定义日志---初始化Dubbo配置Bean");
         // load DubboConfigBeanInitializer to init config beans
         if (applicationContext.containsBean(DubboConfigBeanInitializer.BEAN_NAME)) {
+            logger.info("自定义日志---initDubboConfigBeans中，【获取bean】：DubboConfigBeanInitializer");
             applicationContext.getBean(DubboConfigBeanInitializer.BEAN_NAME, DubboConfigBeanInitializer.class);
         } else {
             logger.warn(
@@ -84,6 +85,7 @@ public class DubboConfigApplicationListener
         }
 
         // All infrastructure config beans are loaded, initialize dubbo here
+        logger.info("自定义日志---initDubboConfigBeans中，调用：moduleModel.getDeployer().prepare()方法");
         moduleModel.getDeployer().prepare();
     }
 }

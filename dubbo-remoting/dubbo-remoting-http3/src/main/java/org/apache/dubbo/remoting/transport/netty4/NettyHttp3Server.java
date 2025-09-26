@@ -18,6 +18,8 @@ package org.apache.dubbo.remoting.transport.netty4;
 
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.config.ConfigurationUtils;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.NetUtils;
 import org.apache.dubbo.remoting.Channel;
@@ -51,7 +53,7 @@ import static org.apache.dubbo.remoting.Constants.EVENT_LOOP_BOSS_POOL_NAME;
 import static org.apache.dubbo.remoting.http3.netty4.Constants.PIPELINE_CONFIGURATOR_KEY;
 
 public class NettyHttp3Server extends AbstractServer {
-
+    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(NettyHttp3Server.class);
     private Map<String, Channel> channels;
     private Bootstrap bootstrap;
     private EventLoopGroup bossGroup;
@@ -71,6 +73,7 @@ public class NettyHttp3Server extends AbstractServer {
     @Override
     protected void doOpen() throws Throwable {
         bootstrap = new Bootstrap();
+        logger.info("自定义日志---创建线程池：" + EVENT_LOOP_BOSS_POOL_NAME + "(NettyEventLoopFactory.eventLoopGroup)");
         bossGroup = NettyEventLoopFactory.eventLoopGroup(1, EVENT_LOOP_BOSS_POOL_NAME);
         NettyServerHandler nettyServerHandler = new NettyServerHandler(getUrl(), this);
         channels = nettyServerHandler.getChannels();

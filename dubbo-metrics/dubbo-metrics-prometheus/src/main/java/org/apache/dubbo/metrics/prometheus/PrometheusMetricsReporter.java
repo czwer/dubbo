@@ -79,6 +79,7 @@ public class PrometheusMetricsReporter extends AbstractMetricsReporter {
             String password = url.getParameter(PROMETHEUS_PUSHGATEWAY_PASSWORD_KEY);
 
             NamedThreadFactory threadFactory = new NamedThreadFactory("prometheus-push-job", true);
+            logger.info("自定义日志---创建线程池：prometheus-push-job(Executors.newScheduledThreadPool)");
             pushJobExecutor = Executors.newScheduledThreadPool(1, threadFactory);
             PushGateway pushGateway = new PushGateway(baseUrl);
             if (!StringUtils.isBlank(username)) {

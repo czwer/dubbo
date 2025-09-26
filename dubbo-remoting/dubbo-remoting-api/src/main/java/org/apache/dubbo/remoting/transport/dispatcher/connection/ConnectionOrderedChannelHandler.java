@@ -17,6 +17,8 @@
 package org.apache.dubbo.remoting.transport.dispatcher.connection;
 
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.threadpool.support.AbortPolicyWithReport;
 import org.apache.dubbo.common.utils.NamedThreadFactory;
 import org.apache.dubbo.remoting.Channel;
@@ -42,13 +44,15 @@ import static org.apache.dubbo.remoting.Constants.CONNECT_QUEUE_WARNING_SIZE;
 import static org.apache.dubbo.remoting.Constants.DEFAULT_CONNECT_QUEUE_WARNING_SIZE;
 
 public class ConnectionOrderedChannelHandler extends WrappedChannelHandler {
-
+    protected static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ConnectionOrderedChannelHandler.class);
     protected final ThreadPoolExecutor connectionExecutor;
     private final int queueWarningLimit;
 
     public ConnectionOrderedChannelHandler(ChannelHandler handler, URL url) {
         super(handler, url);
         String threadName = url.getParameter(THREAD_NAME_KEY, DEFAULT_THREAD_NAME);
+        logger.info("自定义日志---创建线程池：" + threadName + "ThreadPoolExecutor");
         connectionExecutor = new ThreadPoolExecutor(
                 1,
                 1,

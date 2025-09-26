@@ -20,6 +20,8 @@ import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.Version;
 import org.apache.dubbo.common.config.ConfigurationUtils;
 import org.apache.dubbo.common.constants.CommonConstants;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.resource.GlobalResourceInitializer;
 import org.apache.dubbo.common.utils.NetUtils;
 import org.apache.dubbo.common.utils.StringUtils;
@@ -58,7 +60,7 @@ import static org.apache.dubbo.remoting.transport.netty4.NettyEventLoopFactory.s
  * NettyClient.
  */
 public class NettyClient extends AbstractClient {
-
+    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(NettyClient.class);
     private static final String SOCKS_PROXY_HOST = "socksProxyHost";
 
     private static final String SOCKS_PROXY_PORT = "socksProxyPort";
@@ -67,6 +69,7 @@ public class NettyClient extends AbstractClient {
 
     /**
      * netty client bootstrap
+     * //创建线程池
      */
     private static final GlobalResourceInitializer<EventLoopGroup> EVENT_LOOP_GROUP = new GlobalResourceInitializer<>(
             () -> eventLoopGroup(Constants.DEFAULT_IO_THREADS, "NettyClientWorker"),

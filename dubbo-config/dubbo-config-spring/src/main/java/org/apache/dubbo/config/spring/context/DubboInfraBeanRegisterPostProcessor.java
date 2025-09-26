@@ -52,7 +52,8 @@ public class DubboInfraBeanRegisterPostProcessor implements BeanDefinitionRegist
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
+        logger.info(
+                "自定义日志---DubboInfraBeanRegisterPostProcessor实现BeanFactoryPostProcessor接口，执行方法postProcessBeanFactory：注册Dubbo框架运行所必需的基础设施Bean");
         // In Spring 3.2.x, registry may be null because do not call postProcessBeanDefinitionRegistry method before
         // postProcessBeanFactory
         if (registry != null) {
@@ -61,6 +62,8 @@ public class DubboInfraBeanRegisterPostProcessor implements BeanDefinitionRegist
             // for processing early init ReferenceBean
             ReferenceAnnotationBeanPostProcessor referenceAnnotationBeanPostProcessor = beanFactory.getBean(
                     ReferenceAnnotationBeanPostProcessor.BEAN_NAME, ReferenceAnnotationBeanPostProcessor.class);
+            logger.info("自定义日志---【添加BeanPostProcessor】：ReferenceAnnotationBeanPostProcessor");
+
             beanFactory.addBeanPostProcessor(referenceAnnotationBeanPostProcessor);
 
             // register PropertySourcesPlaceholderConfigurer bean if not exits

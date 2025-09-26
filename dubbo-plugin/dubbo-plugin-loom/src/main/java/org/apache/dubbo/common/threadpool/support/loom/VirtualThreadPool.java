@@ -18,7 +18,8 @@ package org.apache.dubbo.common.threadpool.support.loom;
 
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.threadpool.ThreadPool;
-
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -31,10 +32,14 @@ import static org.apache.dubbo.common.constants.CommonConstants.THREAD_NAME_KEY;
  * @see Executors#newVirtualThreadPerTaskExecutor()
  */
 public class VirtualThreadPool implements ThreadPool {
+    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(VirtualThreadPool.class);
+
+
     @Override
     public Executor getExecutor(URL url) {
         String name =
                 url.getParameter(THREAD_NAME_KEY, (String) url.getAttribute(THREAD_NAME_KEY, DEFAULT_THREAD_NAME));
+        logger.info("自定义日志---创建线程池："+name+"(Executors.newThreadPerTaskExecutor)");
         return Executors.newThreadPerTaskExecutor(
                 Thread.ofVirtual().name(name, 1).factory());
     }

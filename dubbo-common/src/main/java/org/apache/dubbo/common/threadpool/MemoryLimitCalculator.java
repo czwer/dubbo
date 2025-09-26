@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.common.threadpool;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.resource.GlobalResourcesRepository;
 import org.apache.dubbo.common.utils.NamedThreadFactory;
 
@@ -33,7 +35,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @see <a href="https://github.com/apache/incubator-shenyu/blob/master/shenyu-common/src/main/java/org/apache/shenyu/common/concurrent/MemoryLimitCalculator.java">MemoryLimitCalculator</a>
  */
 public class MemoryLimitCalculator {
-
+    protected static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(MemoryLimitCalculator.class);
     private static volatile long maxAvailable;
 
     private static final AtomicBoolean refreshStarted = new AtomicBoolean(false);
@@ -49,6 +52,7 @@ public class MemoryLimitCalculator {
             // notice: refresh may be called for more than once because there is no lock
             refresh();
             if (refreshStarted.compareAndSet(false, true)) {
+                logger.info("自定义日志---创建线程池：Dubbo-Memory-Calculator(Executors.newSingleThreadScheduledExecutor)");
                 ScheduledExecutorService scheduledExecutorService =
                         Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Dubbo-Memory-Calculator"));
                 // check every 50 ms to improve performance

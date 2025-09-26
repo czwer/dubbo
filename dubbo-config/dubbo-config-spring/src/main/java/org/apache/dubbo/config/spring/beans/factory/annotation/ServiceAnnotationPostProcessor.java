@@ -179,8 +179,7 @@ public class ServiceAnnotationPostProcessor
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         logger.info(
-                "自定义日志---确保所有标注了 @DubboService（或历史版本的 @Service）注解的服务类都能被正确识别并封装成 Dubbo的ServiceBean，为后续的服务导出做准备（ postProcessBeanFactory）："
-                        + String.join(",", resolvedPackagesToScan));
+                "自定义日志---ServiceAnnotationPostProcessor实现BeanFactoryPostProcessor接口，执行方法postProcessBeanFactory：方法主要承担 “查漏补缺”和“最终确认” 的职责，确保之前扫描到的Dubbo服务注解能被正确处理");
         if (this.registry == null) {
             // In spring 3.x, may be not call postProcessBeanDefinitionRegistry()
             this.registry = (BeanDefinitionRegistry) beanFactory;

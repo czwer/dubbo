@@ -56,12 +56,14 @@ import static org.apache.dubbo.common.constants.LoggerCodeConstants.REGISTRY_FAI
 
 public class ReflectionBasedServiceDiscovery extends AbstractServiceDiscovery {
 
-    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ReflectionBasedServiceDiscovery.class);
 
     /**
      * Echo check if consumer is still work
      * echo task may take a lot of time when consumer offline, create a new ScheduledThreadPool
      */
+    // 创建线程池
     private final ScheduledExecutorService echoCheckExecutor =
             Executors.newScheduledThreadPool(1, new NamedThreadFactory("Dubbo-Registry-EchoCheck-Consumer"));
 

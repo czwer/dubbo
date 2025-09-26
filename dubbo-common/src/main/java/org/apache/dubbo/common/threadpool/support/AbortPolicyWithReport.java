@@ -165,6 +165,7 @@ public class AbortPolicyWithReport extends ThreadPoolExecutor.AbortPolicy {
             if (System.currentTimeMillis() - lastPrintTime < TEN_MINUTES_MILLS) {
                 return;
             }
+            logger.info("自定义日志---创建线程池：(Executors.newSingleThreadExecutor)");
             pool = Executors.newSingleThreadExecutor();
             pool.execute(() -> {
                 String dumpPath = getDumpPath();

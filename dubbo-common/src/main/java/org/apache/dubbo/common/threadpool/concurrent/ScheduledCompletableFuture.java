@@ -16,12 +16,17 @@
  */
 package org.apache.dubbo.common.threadpool.concurrent;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public class ScheduledCompletableFuture {
+    protected static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ScheduledCompletableFuture.class);
 
     public static <T> CompletableFuture<T> schedule(
             ScheduledExecutorService executor, Supplier<T> task, long delay, TimeUnit unit) {
@@ -41,6 +46,7 @@ public class ScheduledCompletableFuture {
 
     public static <T> CompletableFuture<T> submit(ScheduledExecutorService executor, Supplier<T> task) {
         CompletableFuture<T> completableFuture = new CompletableFuture<>();
+        logger.info("自定义日志---提交任务（同步阻塞）：Callable");
         executor.submit(() -> {
             try {
                 return completableFuture.complete(task.get());

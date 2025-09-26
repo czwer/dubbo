@@ -68,7 +68,7 @@ public class BaseOffline implements BaseCommand {
 
     public boolean offline(String servicePattern) {
         boolean hasService = false;
-
+        logger.info("自定义日志---创建线程池：Dubbo-Offline(Executors.newFixedThreadPool)");
         ExecutorService executorService = Executors.newFixedThreadPool(
                 Math.min(Runtime.getRuntime().availableProcessors(), 4), new NamedThreadFactory("Dubbo-Offline"));
         try {

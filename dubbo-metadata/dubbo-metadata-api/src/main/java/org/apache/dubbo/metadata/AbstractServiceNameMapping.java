@@ -47,7 +47,8 @@ import static org.apache.dubbo.common.utils.CollectionUtils.toTreeSet;
 import static org.apache.dubbo.common.utils.StringUtils.isBlank;
 
 public abstract class AbstractServiceNameMapping implements ServiceNameMapping {
-    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    protected final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(AbstractServiceNameMapping.class);
     protected ApplicationModel applicationModel;
     private final MappingCacheManager mappingCacheManager;
     private final Map<String, Set<MappingListener>> mappingListeners = new ConcurrentHashMap<>();
@@ -124,6 +125,7 @@ public abstract class AbstractServiceNameMapping implements ServiceNameMapping {
                     .getBeanFactory()
                     .getBean(FrameworkExecutorRepository.class)
                     .getMappingRefreshingExecutor();
+            logger.info("自定义日志---提交任务（同步阻塞）：Callable");
             executorService.submit(new AsyncMappingTask(listener, subscribedURL, true));
         }
 

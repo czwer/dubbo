@@ -254,6 +254,7 @@ public class HashedWheelTimer implements Timer {
                 "tickDuration: %d (expected: 0 < tickDuration in nanos < %d",
                 tickDuration, Long.MAX_VALUE / wheel.length));
         }
+        logger.info("自定义日志---创建线程：(ThreadFactory.newThread)");
         workerThread = threadFactory.newThread(worker);
 
         this.maxPendingTimeouts = maxPendingTimeouts;

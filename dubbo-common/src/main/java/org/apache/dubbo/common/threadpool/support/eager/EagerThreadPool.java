@@ -17,6 +17,8 @@
 package org.apache.dubbo.common.threadpool.support.eager;
 
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.threadlocal.NamedInternalThreadFactory;
 import org.apache.dubbo.common.threadpool.ThreadPool;
 import org.apache.dubbo.common.threadpool.support.AbortPolicyWithReport;
@@ -40,6 +42,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.THREAD_NAME_KEY;
  * create new thread instead of putting task into blocking queue.
  */
 public class EagerThreadPool implements ThreadPool {
+    private static final Logger logger = LoggerFactory.getLogger(EagerThreadPool.class);
 
     @Override
     public Executor getExecutor(URL url) {
@@ -52,6 +55,7 @@ public class EagerThreadPool implements ThreadPool {
 
         // init queue and executor
         TaskQueue<Runnable> taskQueue = new TaskQueue<>(queues <= 0 ? 1 : queues);
+        logger.info("自定义日志---创建线程池：" + name + "（EagerThreadPoolExecutor）");
         EagerThreadPoolExecutor executor = new EagerThreadPoolExecutor(
                 cores,
                 threads,

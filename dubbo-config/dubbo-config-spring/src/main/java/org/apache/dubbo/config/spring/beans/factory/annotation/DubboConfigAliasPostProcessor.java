@@ -55,6 +55,8 @@ public class DubboConfigAliasPostProcessor implements BeanDefinitionRegistryPost
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         // DO NOTHING
+        logger.info(
+                "自定义日志---DubboConfigAliasPostProcessor实现BeanFactoryPostProcessor接口，执行方法postProcessBeanFactory：逻辑为空");
     }
 
     @Override

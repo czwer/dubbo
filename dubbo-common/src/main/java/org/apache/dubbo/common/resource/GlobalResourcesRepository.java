@@ -95,6 +95,7 @@ public class GlobalResourcesRepository {
                     if (logger.isInfoEnabled()) {
                         logger.info("Creating global shared handler ...");
                     }
+                    logger.info("自定义日志---创建线程池：Dubbo-global-shared-handler(Executors.newCachedThreadPool)");
                     executorService =
                             Executors.newCachedThreadPool(new NamedThreadFactory("Dubbo-global-shared-handler", true));
                 }

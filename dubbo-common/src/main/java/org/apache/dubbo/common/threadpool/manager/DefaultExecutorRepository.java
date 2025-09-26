@@ -298,6 +298,8 @@ public class DefaultExecutorRepository implements ExecutorRepository, ExtensionA
                 int coreSize = getExportThreadNum();
                 String applicationName = applicationModel.tryGetApplicationName();
                 applicationName = StringUtils.isEmpty(applicationName) ? "app" : applicationName;
+                logger.info(
+                        "自定义日志---创建线程池：Dubbo-" + applicationName + "-service-export(Executors.newScheduledThreadPool)");
                 serviceExportExecutor = Executors.newScheduledThreadPool(
                         coreSize, new NamedThreadFactory("Dubbo-" + applicationName + "-service-export", true));
             }
@@ -327,6 +329,7 @@ public class DefaultExecutorRepository implements ExecutorRepository, ExtensionA
                 int coreSize = getReferThreadNum();
                 String applicationName = applicationModel.tryGetApplicationName();
                 applicationName = StringUtils.isEmpty(applicationName) ? "app" : applicationName;
+                logger.info("自定义日志---创建线程池：Dubbo-" + applicationName + "-service-refer(Executors.newFixedThreadPool)");
                 serviceReferExecutor = Executors.newFixedThreadPool(
                         coreSize, new NamedThreadFactory("Dubbo-" + applicationName + "-service-refer", true));
             }

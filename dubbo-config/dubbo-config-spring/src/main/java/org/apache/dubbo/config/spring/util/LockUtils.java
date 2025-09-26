@@ -16,13 +16,16 @@
  */
 package org.apache.dubbo.config.spring.util;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import java.lang.reflect.Method;
 
 import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.context.ApplicationContext;
 
 public class LockUtils {
-
+    private static final Logger logger = LoggerFactory.getLogger(LockUtils.class);
     private static final String DUBBO_SINGLETON_MUTEX_KEY = "DUBBO_SINGLETON_MUTEX";
 
     /**
@@ -42,6 +45,7 @@ public class LockUtils {
             } catch (Throwable t2) {
                 // Before Spring 4.2, there is no getSingletonMutex method
                 if (!autowireCapableBeanFactory.containsSingleton(DUBBO_SINGLETON_MUTEX_KEY)) {
+                    logger.info("自定义日志---【注册单例Bean】：" + DUBBO_SINGLETON_MUTEX_KEY);
                     autowireCapableBeanFactory.registerSingleton(DUBBO_SINGLETON_MUTEX_KEY, new Object());
                 }
                 return autowireCapableBeanFactory.getSingleton(DUBBO_SINGLETON_MUTEX_KEY);

@@ -77,7 +77,8 @@ public abstract class AbstractDynamicConfiguration implements DynamicConfigurati
     /**
      * Logger
      */
-    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    protected final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(AbstractDynamicConfiguration.class);
 
     /**
      * The thread pool for workers who execute the tasks
@@ -210,6 +211,7 @@ public abstract class AbstractDynamicConfiguration implements DynamicConfigurati
             if (timeout < 1) { // less or equal 0
                 value = task.call();
             } else {
+                logger.info("自定义日志---提交任务（同步阻塞）：Callable");
                 Future<V> future = workersThreadPool.submit(task);
                 value = future.get(timeout, TimeUnit.MILLISECONDS);
             }
@@ -237,6 +239,7 @@ public abstract class AbstractDynamicConfiguration implements DynamicConfigurati
 
     protected ThreadPoolExecutor initWorkersThreadPool(
             String threadPoolPrefixName, int threadPoolSize, long keepAliveTime) {
+        logger.info("自定义日志---创建线程池：" + threadPoolPrefixName + "（ThreadPoolExecutor）");
         return new ThreadPoolExecutor(
                 threadPoolSize,
                 threadPoolSize,

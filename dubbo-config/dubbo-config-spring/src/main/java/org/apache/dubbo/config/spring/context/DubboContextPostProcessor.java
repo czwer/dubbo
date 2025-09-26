@@ -53,6 +53,8 @@ public class DubboContextPostProcessor
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        logger.info(
+                "自定义日志---DubboContextPostProcessor实现BeanFactoryPostProcessor接口，执行方法postProcessBeanFactory：扮演着环境准备和上下文初始化的关键角色");
         ApplicationModel applicationModel = DubboBeanUtils.getApplicationModel(beanFactory);
         ModuleModel moduleModel = DubboBeanUtils.getModuleModel(beanFactory);
 
@@ -67,6 +69,7 @@ public class DubboContextPostProcessor
         applicationModel.getModelEnvironment().getAppConfigMap().putAll(dubboProperties);
 
         // register ConfigManager singleton
+        logger.info("自定义日志---【注册单例Bean】：" + ConfigManager.BEAN_NAME);
         beanFactory.registerSingleton(ConfigManager.BEAN_NAME, applicationModel.getApplicationConfigManager());
     }
 

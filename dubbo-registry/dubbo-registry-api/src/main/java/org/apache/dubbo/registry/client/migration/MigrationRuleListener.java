@@ -80,6 +80,7 @@ public class MigrationRuleListener implements RegistryProtocolListener, Configur
     protected final LinkedBlockingQueue<String> ruleQueue = new LinkedBlockingQueue<>();
 
     private final AtomicBoolean executorSubmit = new AtomicBoolean(false);
+    // 创建线程池
     private final ExecutorService ruleManageExecutor =
             Executors.newFixedThreadPool(1, new NamedThreadFactory("Dubbo-Migration-Listener"));
 
@@ -177,6 +178,7 @@ public class MigrationRuleListener implements RegistryProtocolListener, Configur
         }
 
         if (executorSubmit.compareAndSet(false, true)) {
+            logger.info("自定义日志---提交任务（同步阻塞）：Runnable");
             ruleMigrationFuture = ruleManageExecutor.submit(() -> {
                 while (true) {
                     String rule = "";
@@ -212,6 +214,7 @@ public class MigrationRuleListener implements RegistryProtocolListener, Configur
                                 Math.min(handlers.size(), 100), new NamedThreadFactory("Dubbo-Invoker-Migrate"));
                         List<Future<?>> migrationFutures = new ArrayList<>(handlers.size());
                         for (MigrationRuleHandler<?> handler : handlers.values()) {
+                            logger.info("自定义日志---提交任务（同步阻塞）：Runnable");
                             Future<?> future = executorService.submit(() -> handler.doMigrate(this.rule));
                             migrationFutures.add(future);
                         }

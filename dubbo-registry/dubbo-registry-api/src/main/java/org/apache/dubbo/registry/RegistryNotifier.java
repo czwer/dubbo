@@ -90,6 +90,7 @@ public abstract class RegistryNotifier {
             if (!shouldDelay.get() && executeTime.incrementAndGet() > DEFAULT_DELAY_EXECUTE_TIMES) {
                 shouldDelay.set(true);
             }
+            logger.info("自定义日志---提交任务（同步阻塞）：Runnable");
             scheduler.submit(new NotificationTask(this, notifyTime));
         }
         try {

@@ -239,6 +239,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
                 getScopeModel().getDeployer().prepare();
             } else {
                 // ensure start module, compatible with old api usage
+                logger.info("自定义日志---调用：getScopeModel().getDeployer().start()");
                 getScopeModel().getDeployer().start();
             }
 

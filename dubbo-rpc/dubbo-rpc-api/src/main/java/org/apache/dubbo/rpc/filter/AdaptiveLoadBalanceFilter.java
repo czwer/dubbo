@@ -18,6 +18,8 @@ package org.apache.dubbo.rpc.filter;
 
 import org.apache.dubbo.common.constants.LoadbalanceRules;
 import org.apache.dubbo.common.extension.Activate;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.resource.GlobalResourcesRepository;
 import org.apache.dubbo.common.threadlocal.NamedInternalThreadFactory;
 import org.apache.dubbo.common.utils.StringUtils;
@@ -50,7 +52,8 @@ import static org.apache.dubbo.common.constants.CommonConstants.LOADBALANCE_KEY;
         order = -200000,
         value = {"loadbalance:adaptive"})
 public class AdaptiveLoadBalanceFilter implements Filter, Filter.Listener {
-
+    protected static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(AdaptiveLoadBalanceFilter.class);
     /**
      * uses a single worker thread operating off an bounded queue
      */
@@ -66,6 +69,7 @@ public class AdaptiveLoadBalanceFilter implements Filter, Filter.Listener {
         if (null == executor) {
             synchronized (this) {
                 if (null == executor) {
+                    logger.info("自定义日志---创建线程池：Dubbo-framework-loadbalance-adaptive（ThreadPoolExecutor）");
                     executor = new ThreadPoolExecutor(
                             1,
                             1,

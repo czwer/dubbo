@@ -147,6 +147,7 @@ public abstract class AbstractMetricsReporter implements MetricsReporter {
             int collectSyncPeriod = url.getParameter(COLLECTOR_SYNC_PERIOD_KEY, DEFAULT_SCHEDULE_PERIOD);
 
             NamedThreadFactory threadFactory = new NamedThreadFactory("metrics-collector-sync-job", true);
+            logger.info("自定义日志---创建线程池：metrics-collector-sync-job(Executors.newScheduledThreadPool)");
             collectorSyncJobExecutor = Executors.newScheduledThreadPool(1, threadFactory);
             collectorSyncJobExecutor.scheduleWithFixedDelay(
                     this::resetIfSamplesChanged, DEFAULT_SCHEDULE_INITIAL_DELAY, collectSyncPeriod, TimeUnit.SECONDS);

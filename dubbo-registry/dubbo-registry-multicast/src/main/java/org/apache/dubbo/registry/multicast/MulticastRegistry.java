@@ -83,7 +83,7 @@ public class MulticastRegistry extends FailbackRegistry {
     private final int multicastPort;
 
     private final ConcurrentMap<URL, Set<URL>> received = new ConcurrentHashMap<>();
-
+    // 创建线程池
     private final ScheduledExecutorService cleanExecutor =
             Executors.newScheduledThreadPool(1, new NamedThreadFactory("DubboMulticastRegistryCleanTimer", true));
 

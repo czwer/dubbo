@@ -173,9 +173,10 @@ public class DubboDeployApplicationListener
         // start module
         Future future = null;
         synchronized (singletonMutex) {
-            logger.info("自定义日志【重要】---服务导出与引用开始");
+            logger.info("自定义日志【重要】---服务导出与引用：开始");
+            logger.info("自定义日志【重要】---调用：deployer.start()");
             future = deployer.start();
-            logger.info("自定义日志【重要】---服务导出与引用完成");
+            logger.info("自定义日志【重要】---服务导出与引用：完成");
         }
 
         // if the module does not start in background, await finish

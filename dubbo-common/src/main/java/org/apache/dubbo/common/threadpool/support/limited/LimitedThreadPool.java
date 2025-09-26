@@ -17,6 +17,8 @@
 package org.apache.dubbo.common.threadpool.support.limited;
 
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.threadlocal.NamedInternalThreadFactory;
 import org.apache.dubbo.common.threadpool.MemorySafeLinkedBlockingQueue;
 import org.apache.dubbo.common.threadpool.ThreadPool;
@@ -43,6 +45,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.THREAD_NAME_KEY;
  * automatically.
  */
 public class LimitedThreadPool implements ThreadPool {
+    private static final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(LimitedThreadPool.class);
 
     @Override
     public Executor getExecutor(URL url) {
@@ -61,7 +64,7 @@ public class LimitedThreadPool implements ThreadPool {
         } else {
             blockingQueue = new LinkedBlockingQueue<>(queues);
         }
-
+        logger.info("自定义日志---创建线程池：" + name + "（ThreadPoolExecutor）");
         return new ThreadPoolExecutor(
                 cores,
                 threads,

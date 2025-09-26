@@ -63,16 +63,21 @@ public class FrameworkExecutorRepository implements Disposable {
     private final ExecutorService internalServiceExecutor;
 
     public FrameworkExecutorRepository() {
+        logger.info("自定义日志---创建线程池：Dubbo-framework-shared-handler(Executors.newCachedThreadPool)");
         sharedExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("Dubbo-framework-shared-handler", true));
+        logger.info("自定义日志---创建线程池：Dubbo-framework-shared-scheduler(Executors.newScheduledThreadPool)");
         sharedScheduledExecutor =
                 Executors.newScheduledThreadPool(8, new NamedThreadFactory("Dubbo-framework-shared-scheduler", true));
 
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         for (int i = 0; i < availableProcessors; i++) {
+            logger.info(
+                    "自定义日志---创建线程池：Dubbo-framework-scheduler-" + i + "(Executors.newSingleThreadScheduledExecutor)");
             ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(
                     new NamedThreadFactory("Dubbo-framework-scheduler-" + i, true));
             scheduledExecutors.addItem(scheduler);
 
+            logger.info("自定义日志---创建线程池：Dubbo-framework-state-router-loop-" + i + "（ThreadPoolExecutor）");
             executorServiceRing.addItem(new ThreadPoolExecutor(
                     1,
                     1,
@@ -83,12 +88,17 @@ public class FrameworkExecutorRepository implements Disposable {
                     new ThreadPoolExecutor.AbortPolicy()));
         }
 
+        logger.info("自定义日志---创建线程池：Dubbo-framework-connectivity-scheduler(Executors.newScheduledThreadPool)");
         connectivityScheduledExecutor = Executors.newScheduledThreadPool(
                 availableProcessors, new NamedThreadFactory("Dubbo-framework-connectivity-scheduler", true));
+        logger.info(
+                "自定义日志---创建线程池：Dubbo-framework-cache-refreshing-scheduler(Executors.newSingleThreadScheduledExecutor)");
         cacheRefreshingScheduledExecutor = Executors.newSingleThreadScheduledExecutor(
                 new NamedThreadFactory("Dubbo-framework-cache-refreshing-scheduler", true));
+        logger.info("自定义日志---创建线程池：Dubbo-framework-mapping-refreshing-scheduler(Executors.newFixedThreadPool)");
         mappingRefreshingExecutor = Executors.newFixedThreadPool(
                 availableProcessors, new NamedThreadFactory("Dubbo-framework-mapping-refreshing-scheduler", true));
+        logger.info("自定义日志---创建线程池：Dubbo-framework-state-router-pool-router（ThreadPoolExecutor）");
         poolRouterExecutor = new ThreadPoolExecutor(
                 1,
                 10,
@@ -99,18 +109,23 @@ public class FrameworkExecutorRepository implements Disposable {
                 new ThreadPoolExecutor.AbortPolicy());
 
         for (int i = 0; i < availableProcessors; i++) {
+            logger.info("自定义日志---创建线程池：Dubbo-framework-SD-address-refresh-" + i
+                    + "(Executors.newSingleThreadScheduledExecutor)");
             ScheduledExecutorService serviceDiscoveryAddressNotificationExecutor =
                     Executors.newSingleThreadScheduledExecutor(
                             new NamedThreadFactory("Dubbo-framework-SD-address-refresh-" + i));
+            logger.info("自定义日志---创建线程池：Dubbo-framework-registry-notification-" + i
+                    + "(Executors.newSingleThreadScheduledExecutor)");
             ScheduledExecutorService registryNotificationExecutor = Executors.newSingleThreadScheduledExecutor(
                     new NamedThreadFactory("Dubbo-framework-registry-notification-" + i));
 
             serviceDiscoveryAddressNotificationExecutorRing.addItem(serviceDiscoveryAddressNotificationExecutor);
             registryNotificationExecutorRing.addItem(registryNotificationExecutor);
         }
-
+        logger.info("自定义日志---创建线程池：Dubbo-framework-metadata-retry(Executors.newSingleThreadScheduledExecutor)");
         metadataRetryExecutor =
                 Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Dubbo-framework-metadata-retry"));
+        logger.info("自定义日志---创建线程池：Dubbo-internal-service（ThreadPoolExecutor）");
         internalServiceExecutor = new ThreadPoolExecutor(
                 0,
                 100,

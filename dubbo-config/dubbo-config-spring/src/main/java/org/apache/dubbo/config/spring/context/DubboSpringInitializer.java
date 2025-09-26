@@ -193,6 +193,7 @@ public class DubboSpringInitializer {
     }
 
     private static void registerSingleton(ConfigurableListableBeanFactory beanFactory, Object bean) {
+        logger.info("自定义日志---【注册单例Bean】：" + bean.getClass().getName());
         beanFactory.registerSingleton(bean.getClass().getName(), bean);
     }
 

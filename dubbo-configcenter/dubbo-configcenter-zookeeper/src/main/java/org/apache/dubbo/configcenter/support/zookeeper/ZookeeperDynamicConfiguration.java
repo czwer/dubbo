@@ -20,6 +20,8 @@ import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.config.configcenter.ConfigItem;
 import org.apache.dubbo.common.config.configcenter.ConfigurationListener;
 import org.apache.dubbo.common.config.configcenter.TreePathDynamicConfiguration;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.threadpool.support.AbortPolicyWithReport;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.NamedThreadFactory;
@@ -40,7 +42,8 @@ import static org.apache.dubbo.common.constants.LoggerCodeConstants.CONFIG_FAILE
 import static org.apache.dubbo.common.constants.LoggerCodeConstants.REGISTRY_ZOOKEEPER_EXCEPTION;
 
 public class ZookeeperDynamicConfiguration extends TreePathDynamicConfiguration {
-
+    protected final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(ZookeeperDynamicConfiguration.class);
     private final Executor executor;
     private ZookeeperClient zkClient;
 
@@ -58,6 +61,7 @@ public class ZookeeperDynamicConfiguration extends TreePathDynamicConfiguration 
         this.applicationModel = applicationModel;
 
         final String threadName = this.getClass().getSimpleName();
+        logger.info("自定义日志---创建线程池：" + threadName + "（ThreadPoolExecutor）");
         this.executor = new ThreadPoolExecutor(
                 DEFAULT_ZK_EXECUTOR_THREADS_NUM,
                 DEFAULT_ZK_EXECUTOR_THREADS_NUM,

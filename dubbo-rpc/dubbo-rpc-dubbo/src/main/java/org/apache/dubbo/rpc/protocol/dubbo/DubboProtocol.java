@@ -19,6 +19,8 @@ package org.apache.dubbo.rpc.protocol.dubbo;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.URLBuilder;
 import org.apache.dubbo.common.config.ConfigurationUtils;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.threadpool.manager.FrameworkExecutorRepository;
 import org.apache.dubbo.common.url.component.ServiceConfigURL;
 import org.apache.dubbo.common.utils.NetUtils;
@@ -93,7 +95,7 @@ import static org.apache.dubbo.rpc.protocol.dubbo.Constants.SHARE_CONNECTIONS_KE
  * dubbo protocol support.
  */
 public class DubboProtocol extends AbstractProtocol {
-
+    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(DubboProtocol.class);
     public static final String NAME = "dubbo";
 
     public static final int DEFAULT_PORT = 20880;
@@ -494,6 +496,7 @@ public class DubboProtocol extends AbstractProtocol {
     }
 
     protected void scheduleRemoveSharedClient(String key, SharedClientsProvider sharedClient) {
+        logger.info("自定义日志---提交任务（同步阻塞）：Callable");
         this.frameworkModel
                 .getBeanFactory()
                 .getBean(FrameworkExecutorRepository.class)

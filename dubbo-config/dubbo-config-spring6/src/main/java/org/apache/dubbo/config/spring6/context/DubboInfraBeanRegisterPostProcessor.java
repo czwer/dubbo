@@ -16,6 +16,9 @@
  */
 package org.apache.dubbo.config.spring6.context;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -30,10 +33,15 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
  *ConfigurableListableBeanFactory, java.util.List)
  */
 public class DubboInfraBeanRegisterPostProcessor implements BeanDefinitionRegistryPostProcessor {
+    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(
+            org.apache.dubbo.config.spring6.context.DubboInfraBeanRegisterPostProcessor.class);
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {}
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {}
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        logger.info(
+                "自定义日志---DubboInfraBeanRegisterPostProcessor实现BeanFactoryPostProcessor接口，执行方法postProcessBeanFactory：空方法");
+    }
 }

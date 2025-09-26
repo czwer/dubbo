@@ -18,6 +18,8 @@ package org.apache.dubbo.rpc.protocol.tri.h3.negotiation;
 
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.constants.CommonConstants;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.ClassUtils;
 import org.apache.dubbo.common.utils.NamedThreadFactory;
 import org.apache.dubbo.common.utils.NetUtils;
@@ -34,7 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.apache.dubbo.common.constants.LoggerCodeConstants.PROTOCOL_ERROR_CLOSE_CLIENT;
 
 public class AutoSwitchConnectionClient extends AbstractConnectionClient {
-
+    protected final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(AutoSwitchConnectionClient.class);
     private static final int MAX_RETRIES = 8;
 
     private final URL url;
@@ -51,6 +54,7 @@ public class AutoSwitchConnectionClient extends AbstractConnectionClient {
     public AutoSwitchConnectionClient(URL url, AbstractConnectionClient connectionClient) {
         this.url = url;
         this.connectionClient = connectionClient;
+        logger.info("自定义日志---创建线程池：Dubbo-http3-negotiation(Executors.newSingleThreadScheduledExecutor)");
         executor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("Dubbo-http3-negotiation"));
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         connectionClient.addConnectedListener(() -> ClassUtils.runWith(tccl, () -> executor.execute(this::negotiate)));

@@ -50,6 +50,7 @@ public class ClassLoaderResourceLoader {
         Map<ClassLoader, Set<URL>> resources = new ConcurrentHashMap<>();
         CountDownLatch countDownLatch = new CountDownLatch(classLoaders.size());
         for (ClassLoader classLoader : classLoaders) {
+            logger.info("自定义日志---提交任务（同步阻塞）：Runnable");
             GlobalResourcesRepository.getGlobalExecutorService().submit(() -> {
                 resources.put(classLoader, loadResources(fileName, classLoader));
                 countDownLatch.countDown();

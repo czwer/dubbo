@@ -227,6 +227,7 @@ public final class DubboBootstrap {
      * @return
      */
     public DubboBootstrap start(boolean wait) {
+        logger.info("自定义日志---调用applicationDeployer.start()");
         Future future = applicationDeployer.start();
         if (wait) {
             try {
@@ -244,6 +245,7 @@ public final class DubboBootstrap {
      * @return the future object
      */
     public Future asyncStart() {
+        logger.info("自定义日志---调用：applicationDeployer.start()");
         return applicationDeployer.start();
     }
 

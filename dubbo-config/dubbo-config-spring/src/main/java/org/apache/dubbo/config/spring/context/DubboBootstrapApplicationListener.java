@@ -54,7 +54,8 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
      */
     public static final String BEAN_NAME = "dubboBootstrapApplicationListener";
 
-    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboBootstrapApplicationListener.class);
 
     private ApplicationContext applicationContext;
     private DubboBootstrap bootstrap;
@@ -94,6 +95,7 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     private void initDubboConfigBeans() {
         // load DubboConfigBeanInitializer to init config beans
         if (applicationContext.containsBean(DubboConfigBeanInitializer.BEAN_NAME)) {
+            logger.info("自定义日志---initDubboConfigBeans中，【获取bean】：DubboConfigBeanInitializer");
             applicationContext.getBean(DubboConfigBeanInitializer.BEAN_NAME, DubboConfigBeanInitializer.class);
         } else {
             logger.warn(
@@ -104,6 +106,7 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
         }
 
         // All infrastructure config beans are loaded, initialize dubbo here
+        logger.info("自定义日志---initDubboConfigBeans中，调用：moduleModel.getDeployer().initialize()方法");
         moduleModel.getDeployer().initialize();
     }
 
@@ -123,9 +126,12 @@ public class DubboBootstrapApplicationListener implements ApplicationListener, A
     }
 
     private void onContextRefreshedEvent(ContextRefreshedEvent event) {
-        logger.info("自定义日志---监听到事件：ContextRefreshedEvent，timestamp：" + event.getTimestamp());
         if (bootstrap.getTakeoverMode() == BootstrapTakeoverMode.SPRING) {
+            logger.info("自定义日志---监听到事件：ContextRefreshedEvent，timestamp：" + event.getTimestamp()
+                    + ",调用moduleModel.getDeployer().start()");
             moduleModel.getDeployer().start();
+        } else {
+            logger.info("自定义日志---监听到事件：ContextRefreshedEvent，timestamp：" + event.getTimestamp());
         }
     }
 

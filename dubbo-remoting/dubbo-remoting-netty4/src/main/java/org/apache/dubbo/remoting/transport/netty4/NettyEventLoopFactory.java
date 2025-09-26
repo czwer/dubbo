@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.remoting.transport.netty4;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.resource.GlobalResourceInitializer;
 import org.apache.dubbo.common.utils.SystemPropertyConfigUtils;
 import org.apache.dubbo.remoting.Constants;
@@ -39,9 +41,12 @@ import static org.apache.dubbo.common.constants.CommonConstants.SystemProperty.S
 import static org.apache.dubbo.common.constants.CommonConstants.ThirdPartyProperty.NETTY_EPOLL_ENABLE_KEY;
 
 public class NettyEventLoopFactory {
+    private static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(NettyEventLoopFactory.class);
     /**
      * netty client bootstrap
      */
+    // 创建线程池
     public static final GlobalResourceInitializer<EventLoopGroup> NIO_EVENT_LOOP_GROUP =
             new GlobalResourceInitializer<>(
                     () -> eventLoopGroup(Constants.DEFAULT_IO_THREADS, "NettyClientWorker"),
@@ -49,6 +54,7 @@ public class NettyEventLoopFactory {
 
     public static EventLoopGroup eventLoopGroup(int threads, String threadFactoryName) {
         ThreadFactory threadFactory = new DefaultThreadFactory(threadFactoryName, true);
+        logger.info("自定义日志---创建线程池：" + threadFactoryName + "(NioEventLoopGroup)");
         return shouldEpoll()
                 ? new EpollEventLoopGroup(threads, threadFactory)
                 : new NioEventLoopGroup(threads, threadFactory);

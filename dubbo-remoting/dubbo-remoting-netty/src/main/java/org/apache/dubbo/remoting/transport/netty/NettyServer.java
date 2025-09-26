@@ -70,7 +70,9 @@ public class NettyServer extends AbstractServer implements RemotingServer {
     @Override
     protected void doOpen() throws Throwable {
         NettyHelper.setNettyLoggerFactory();
+        logger.info("自定义日志---创建线程池：" + EVENT_LOOP_BOSS_POOL_NAME + "(Executors.newCachedThreadPool)");
         ExecutorService boss = Executors.newCachedThreadPool(new NamedThreadFactory(EVENT_LOOP_BOSS_POOL_NAME, true));
+        logger.info("自定义日志---创建线程池：" + EVENT_LOOP_WORKER_POOL_NAME + "(Executors.newCachedThreadPool)");
         ExecutorService worker =
                 Executors.newCachedThreadPool(new NamedThreadFactory(EVENT_LOOP_WORKER_POOL_NAME, true));
         ChannelFactory channelFactory = new NioServerSocketChannelFactory(

@@ -168,58 +168,73 @@ public class DefaultModuleDeployer extends AbstractDeployer<ModuleModel> impleme
             if (isStarting() || isStarted() || isCompletion()) {
                 return startFuture;
             }
-
+            logger.info("自定义日志---startSync方法中，调用：onModuleStarting()");
             onModuleStarting();
-
+            logger.info("自定义日志---startSync方法中，调用：initialize()");
             initialize();
 
             // export services
+            logger.info("自定义日志---startSync方法中，调用：exportServices()");
             exportServices();
 
             // prepare application instance
             // exclude internal module to avoid wait itself
             if (moduleModel != moduleModel.getApplicationModel().getInternalModule()) {
+                logger.info("自定义日志---startSync方法中，调用：applicationDeployer.prepareInternalModule()");
                 applicationDeployer.prepareInternalModule();
             }
 
             // refer services
+            logger.info("自定义日志---startSync方法中，调用：referServices()");
             referServices();
 
             // if no async export/refer services, just set started
             if (asyncExportingFutures.isEmpty() && asyncReferringFutures.isEmpty()) {
                 // publish module started event
+                logger.info("自定义日志---startSync方法中，调用：onModuleStarted()");
                 onModuleStarted();
 
                 // register services to registry
+                logger.info("自定义日志---startSync方法中，调用：registerServices()");
                 registerServices();
 
                 // check reference config
+                logger.info("自定义日志---startSync方法中，调用：checkReferences()");
                 checkReferences();
 
                 // publish module completion event
+                logger.info("自定义日志---startSync方法中，调用：onModuleCompletion()");
                 onModuleCompletion();
 
                 // complete module start future after application state changed
+                logger.info("自定义日志---startSync方法中，调用：completeStartFuture()");
                 completeStartFuture(true);
             } else {
+                logger.info("自定义日志---提交任务（同步阻塞）：Runnable");
                 frameworkExecutorRepository.getSharedExecutor().submit(() -> {
                     try {
                         // wait for export finish
+                        logger.info("自定义日志---startSync方法中，调用：waitExportFinish()");
                         waitExportFinish();
 
                         // wait for refer finish
+                        logger.info("自定义日志---startSync方法中，调用：waitReferFinish()");
                         waitReferFinish();
 
                         // publish module started event
+                        logger.info("自定义日志---startSync方法中，调用：onModuleStarted()");
                         onModuleStarted();
 
                         // register services to registry
+                        logger.info("自定义日志---startSync方法中，调用：registerServices()");
                         registerServices();
 
                         // check reference config
+                        logger.info("自定义日志---startSync方法中，调用：checkReferences()");
                         checkReferences();
 
                         // publish module completion event
+                        logger.info("自定义日志---startSync方法中，调用：onModuleCompletion()");
                         onModuleCompletion();
                     } catch (Throwable e) {
                         logger.warn(
@@ -231,6 +246,7 @@ public class DefaultModuleDeployer extends AbstractDeployer<ModuleModel> impleme
                         onModuleFailed(getIdentifier() + " start failed: " + e, e);
                     } finally {
                         // complete module start future after application state changed
+                        logger.info("自定义日志---startSync方法中，调用：completeStartFuture()");
                         completeStartFuture(true);
                     }
                 });
@@ -664,6 +680,7 @@ public class DefaultModuleDeployer extends AbstractDeployer<ModuleModel> impleme
      */
     @Override
     public void prepare() {
+        logger.info("自定义日志---开始调用applicationDeployer.initialize()方法");
         applicationDeployer.initialize();
         this.initialize();
     }

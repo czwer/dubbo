@@ -38,7 +38,7 @@ import static org.apache.dubbo.common.constants.LoggerCodeConstants.COMMON_FAILE
 import static org.apache.dubbo.common.constants.LoggerCodeConstants.COMMON_UNEXPECTED_EXCEPTION;
 
 public abstract class AbstractCacheManager<V> implements Disposable {
-    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(AbstractCacheManager.class);
 
     private ScheduledExecutorService executorService;
 
@@ -70,6 +70,8 @@ public abstract class AbstractCacheManager<V> implements Disposable {
             }
             // executorService can be empty if FileCacheStore fails
             if (executorService == null) {
+                logger.info(
+                        "自定义日志---创建线程池：Dubbo-cache-refreshing-scheduler(Executors.newSingleThreadScheduledExecutor)");
                 this.executorService = Executors.newSingleThreadScheduledExecutor(
                         new NamedThreadFactory("Dubbo-cache-refreshing-scheduler", true));
             } else {

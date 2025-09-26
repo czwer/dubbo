@@ -55,7 +55,7 @@ import static org.apache.dubbo.common.constants.LoggerCodeConstants.PROTOCOL_FAI
  */
 public abstract class AbstractProtocol implements Protocol, ScopeModelAware {
 
-    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    protected final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(AbstractProtocol.class);
 
     protected final Map<String, Exporter<?>> exporterMap = new ConcurrentHashMap<>();
 

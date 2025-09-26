@@ -16,6 +16,9 @@
  */
 package org.apache.dubbo.common.threadpool.support.eager;
 
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
@@ -26,6 +29,7 @@ import java.util.concurrent.TimeUnit;
  * EagerThreadPoolExecutor
  */
 public class EagerThreadPoolExecutor extends ThreadPoolExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(EagerThreadPoolExecutor.class);
 
     public EagerThreadPoolExecutor(
             int corePoolSize,
@@ -40,6 +44,7 @@ public class EagerThreadPoolExecutor extends ThreadPoolExecutor {
 
     @Override
     public void execute(Runnable command) {
+        logger.info("自定义日志---提交任务（同步阻塞）：Runnable");
         if (command == null) {
             throw new NullPointerException();
         }

@@ -17,6 +17,8 @@
 package org.apache.dubbo.common.threadpool.support.cached;
 
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.threadlocal.NamedInternalThreadFactory;
 import org.apache.dubbo.common.threadpool.MemorySafeLinkedBlockingQueue;
 import org.apache.dubbo.common.threadpool.ThreadPool;
@@ -46,6 +48,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.THREAD_NAME_KEY;
  * @see java.util.concurrent.Executors#newCachedThreadPool()
  */
 public class CachedThreadPool implements ThreadPool {
+    private static final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(CachedThreadPool.class);
 
     @Override
     public Executor getExecutor(URL url) {
@@ -65,7 +68,7 @@ public class CachedThreadPool implements ThreadPool {
         } else {
             blockingQueue = new LinkedBlockingQueue<>(queues);
         }
-
+        logger.info("自定义日志---创建线程池：" + name + "（ThreadPoolExecutor）");
         return new ThreadPoolExecutor(
                 cores,
                 threads,

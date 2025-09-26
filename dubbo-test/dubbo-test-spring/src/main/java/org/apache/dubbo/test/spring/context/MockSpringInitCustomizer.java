@@ -56,10 +56,13 @@ public class MockSpringInitCustomizer implements DubboSpringInitCustomizer {
     }
 
     private static class CustomBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+        final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(CustomBeanFactoryPostProcessor.class);
         private ConfigurableListableBeanFactory beanFactory;
 
         @Override
         public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+            logger.info(
+                    "自定义日志---CustomBeanFactoryPostProcessor实现BeanFactoryPostProcessor接口，执行方法postProcessBeanFactory：仅设置beanFactory");
             this.beanFactory = beanFactory;
         }
     }

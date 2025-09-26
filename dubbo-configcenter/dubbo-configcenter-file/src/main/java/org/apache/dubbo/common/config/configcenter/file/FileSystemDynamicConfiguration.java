@@ -639,6 +639,7 @@ public class FileSystemDynamicConfiguration extends TreePathDynamicConfiguration
     }
 
     private static ThreadPoolExecutor newWatchEventsLoopThreadPool() {
+        logger.info("自定义日志---创建线程池：dubbo-config-center-watch-events-loop（ThreadPoolExecutor）");
         return new ThreadPoolExecutor(
                 THREAD_POOL_SIZE,
                 THREAD_POOL_SIZE,
