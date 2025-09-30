@@ -42,9 +42,10 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Invoker<T> invoker, Class<?>[] interfaces) {
-        logger.info("自定义日志【重要】---通过JavassistProxyFactory获取代理对像："
-                + invoker.getInterface().getName());
         try {
+            logger.info(
+                    "自定义日志【重要】---【getProxy】方式一：Proxy.getProxy(interfaces).newInstance(new InvokerInvocationHandler(invoker))："
+                            + invoker.getInterface().getName());
             return (T) Proxy.getProxy(interfaces).newInstance(new InvokerInvocationHandler(invoker));
         } catch (Throwable fromJavassist) {
             // try fall back to JDK proxy factory
@@ -57,6 +58,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
                         "Failed to generate proxy by Javassist failed. Fallback to use JDK proxy success. "
                                 + "Interfaces: " + Arrays.toString(interfaces),
                         fromJavassist);
+                logger.info("自定义日志【重要】---【getProxy】方式二：jdkProxyFactory.getProxy(invoker, interfaces)："
+                        + invoker.getInterface().getName());
                 return proxy;
             } catch (Throwable fromJdk) {
                 logger.error(
@@ -80,11 +83,11 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
 
     @Override
     public <T> Invoker<T> getInvoker(T proxy, Class<T> type, URL url) {
-        logger.info("自定义日志【重要】---通过JavassistProxyFactory获取Invoker，类名：" + type.getName());
         try {
             // TODO Wrapper cannot handle this scenario correctly: the classname contains '$'
             final Wrapper wrapper =
                     Wrapper.getWrapper(proxy.getClass().getName().indexOf('$') < 0 ? proxy.getClass() : type);
+            logger.info("自定义日志【重要】---【getInvoker】方式一：new AbstractProxyInvoker：" + type.getName());
             return new AbstractProxyInvoker<T>(proxy, type, url) {
                 @Override
                 protected Object doInvoke(T proxy, String methodName, Class<?>[] parameterTypes, Object[] arguments)
@@ -105,6 +108,8 @@ public class JavassistProxyFactory extends AbstractProxyFactory {
                                 + "Interfaces: " + type,
                         fromJavassist);
                 // log out error
+                logger.info(
+                        "自定义日志【重要】---【getInvoker】方式二：jdkProxyFactory.getInvoker(proxy, type, url)：" + type.getName());
                 return invoker;
             } catch (Throwable fromJdk) {
                 logger.error(

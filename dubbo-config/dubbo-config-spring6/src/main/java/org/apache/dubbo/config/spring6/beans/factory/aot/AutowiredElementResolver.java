@@ -16,6 +16,9 @@
  */
 package org.apache.dubbo.config.spring6.beans.factory.aot;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+
 import javax.lang.model.element.Element;
 
 import java.util.Set;
@@ -52,6 +55,7 @@ abstract class AutowiredElementResolver {
      */
     @SuppressWarnings("serial")
     static class ShortcutDependencyDescriptor extends DependencyDescriptor {
+        final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(ShortcutDependencyDescriptor.class);
 
         private final String shortcut;
 
@@ -65,6 +69,7 @@ abstract class AutowiredElementResolver {
 
         @Override
         public Object resolveShortcut(BeanFactory beanFactory) {
+            logger.info("自定义日志---调用getBean：" + this.shortcut);
             return beanFactory.getBean(this.shortcut, this.requiredType);
         }
     }

@@ -58,7 +58,7 @@ public class DubboConfigBeanInitializer implements BeanFactoryAware, Initializin
 
     public static String BEAN_NAME = "dubboConfigBeanInitializer";
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(DubboConfigBeanInitializer.class);
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
     private ConfigurableListableBeanFactory beanFactory;
@@ -81,6 +81,7 @@ public class DubboConfigBeanInitializer implements BeanFactoryAware, Initializin
 
     private void init() {
         if (initialized.compareAndSet(false, true)) {
+            logger.info("自定义日志---调用getBean：" + ReferenceBeanManager.BEAN_NAME);
             referenceBeanManager = beanFactory.getBean(ReferenceBeanManager.BEAN_NAME, ReferenceBeanManager.class);
             configManager = DubboBeanUtils.getConfigManager(beanFactory);
             moduleModel = DubboBeanUtils.getModuleModel(beanFactory);
@@ -130,6 +131,7 @@ public class DubboConfigBeanInitializer implements BeanFactoryAware, Initializin
             Class<? extends AbstractConfig> configClass, AbstractConfigManager configManager) {
         String[] beanNames = beanFactory.getBeanNamesForType(configClass, true, false);
         for (String beanName : beanNames) {
+            logger.info("自定义日志---调用getBean：" + beanName);
             AbstractConfig configBean = beanFactory.getBean(beanName, configClass);
             // Register config bean here, avoid relying on unreliable @PostConstruct init method
             configManager.addConfig(configBean);

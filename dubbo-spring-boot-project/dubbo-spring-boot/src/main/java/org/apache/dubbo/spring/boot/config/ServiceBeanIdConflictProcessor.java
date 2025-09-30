@@ -67,6 +67,9 @@ public class ServiceBeanIdConflictProcessor
 
     @Override
     public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+        logger.info(
+                "自定义日志---【MergedBeanDefinitionPostProcessor】ServiceBeanIdConflictProcessor.postProcessMergedBeanDefinition方法："
+                        + beanName);
         // Get raw bean type
         Class<?> rawBeanType = getUserClass(beanType);
         if (isAssignable(ServiceConfig.class, rawBeanType)) { // ServiceConfig type or sub-type

@@ -24,6 +24,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.aot.hint.ExecutableMode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.TypeConverter;
@@ -55,7 +57,7 @@ import org.springframework.util.function.ThrowingConsumer;
  * being used (typically to support private methods).
  */
 public final class ReferencedMethodArgumentsResolver extends AutowiredElementResolver {
-
+    private final Log logger = LogFactory.getLog(ReferencedMethodArgumentsResolver.class);
     private final String methodName;
 
     private final Class<?>[] parameterTypes;
@@ -182,6 +184,7 @@ public final class ReferencedMethodArgumentsResolver extends AutowiredElementRes
                 descriptor = new ShortcutDependencyDescriptor(descriptor, shortcut, parameter.getParameterType());
             }
             try {
+                logger.info("自定义日志---调用getBean：" + shortcut);
                 Object injectedArgument = beanFactory.getBean(shortcut);
                 Object argument = autowireCapableBeanFactory.resolveDependency(
                         descriptor, beanName, autowiredBeanNames, typeConverter);

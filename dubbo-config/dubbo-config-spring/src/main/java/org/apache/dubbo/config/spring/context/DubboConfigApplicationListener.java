@@ -74,7 +74,7 @@ public class DubboConfigApplicationListener
     private void initDubboConfigBeans() {
         // load DubboConfigBeanInitializer to init config beans
         if (applicationContext.containsBean(DubboConfigBeanInitializer.BEAN_NAME)) {
-            logger.info("自定义日志---initDubboConfigBeans中，【获取bean】：DubboConfigBeanInitializer");
+            logger.info("自定义日志---initDubboConfigBeans中，调用getBean：" + DubboConfigBeanInitializer.BEAN_NAME);
             applicationContext.getBean(DubboConfigBeanInitializer.BEAN_NAME, DubboConfigBeanInitializer.class);
         } else {
             logger.warn(

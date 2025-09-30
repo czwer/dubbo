@@ -344,23 +344,33 @@ public abstract class AbstractAnnotationBeanPostProcessor
 
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+        logger.info(
+                "自定义日志---【InstantiationAwareBeanPostProcessor】AbstractAnnotationBeanPostProcessor.postProcessBeforeInstantiation方法:目前是空方法，返回null："
+                        + beanName);
         return null;
     }
 
     @Override
     public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
+        logger.info(
+                "自定义日志---【InstantiationAwareBeanPostProcessor】AbstractAnnotationBeanPostProcessor.postProcessAfterInstantiation方法:目前是空方法，返回true："
+                        + beanName);
         return true;
     }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("自定义日志---实现BeanPostProcessor：目前是空方法：" + beanName);
+        logger.info(
+                "自定义日志---【BeanPostProcessor】AbstractAnnotationBeanPostProcessor.postProcessBeforeInitialization：目前是空方法："
+                        + beanName);
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        logger.info("自定义日志---实现BeanPostProcessor：目前是空方法：" + beanName);
+        logger.info(
+                "自定义日志---【BeanPostProcessor】AbstractAnnotationBeanPostProcessor.postProcessAfterInitialization：目前是空方法："
+                        + beanName);
         return bean;
     }
 

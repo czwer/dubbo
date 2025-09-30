@@ -22,6 +22,8 @@ import org.apache.dubbo.config.spring.ServiceBean;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DubboServicesMetadata extends AbstractDubboMetadata {
+    private final Logger logger = LoggerFactory.getLogger(DubboServicesMetadata.class);
 
     public Map<String, Map<String, Object>> services() {
 
@@ -70,6 +73,7 @@ public class DubboServicesMetadata extends AbstractDubboMetadata {
             String serviceName = serviceBeanName.substring(index + 1);
 
             if (applicationContext.containsBean(serviceName)) {
+                logger.info("自定义日志---调用getBean：" + serviceName);
                 return applicationContext.getBean(serviceName, interfaceClass);
             }
         }

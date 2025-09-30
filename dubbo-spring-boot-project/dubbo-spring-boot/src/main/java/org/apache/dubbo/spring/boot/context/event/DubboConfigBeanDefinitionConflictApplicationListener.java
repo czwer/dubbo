@@ -50,7 +50,7 @@ import static org.springframework.context.ConfigurableApplicationContext.ENVIRON
 public class DubboConfigBeanDefinitionConflictApplicationListener
         implements ApplicationListener<ContextRefreshedEvent>, Ordered {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(DubboConfigBeanDefinitionConflictApplicationListener.class);
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -83,7 +83,7 @@ public class DubboConfigBeanDefinitionConflictApplicationListener
         if (beansNames.length < 2) { // If the number of ApplicationConfig beans is less than two, return immediately.
             return;
         }
-
+        logger.info("自定义日志---调用getBean：" + ENVIRONMENT_BEAN_NAME);
         Environment environment = beanFactory.getBean(ENVIRONMENT_BEAN_NAME, Environment.class);
 
         // Remove ApplicationConfig Beans that are configured by "dubbo.application.*"

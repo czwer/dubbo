@@ -343,6 +343,7 @@ public abstract class AbstractClusterInvoker<T> implements ClusterInvoker<T> {
 
     @Override
     public Result invoke(final Invocation invocation) throws RpcException {
+        logger.info("自定义日志---【Invoker】调用AbstractClusterInvoker.invoke方法");
         checkWhetherDestroyed();
 
         // binding attachments into invocation.

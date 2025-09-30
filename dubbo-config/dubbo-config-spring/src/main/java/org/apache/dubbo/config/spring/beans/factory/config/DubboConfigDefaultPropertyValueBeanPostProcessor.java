@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.beans.factory.config;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.AbstractConfig;
 import org.apache.dubbo.config.Constants;
 import org.apache.dubbo.config.spring.util.GenericBeanPostProcessorAdapter;
@@ -47,6 +49,8 @@ import static org.springframework.util.ReflectionUtils.invokeMethod;
  */
 public class DubboConfigDefaultPropertyValueBeanPostProcessor extends GenericBeanPostProcessorAdapter<AbstractConfig>
         implements MergedBeanDefinitionPostProcessor, PriorityOrdered {
+    private final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboConfigDefaultPropertyValueBeanPostProcessor.class);
 
     /**
      * The bean name of {@link DubboConfigDefaultPropertyValueBeanPostProcessor}
@@ -68,6 +72,9 @@ public class DubboConfigDefaultPropertyValueBeanPostProcessor extends GenericBea
     @Override
     public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
         // DO NOTHING
+        logger.info(
+                "自定义日志---【MergedBeanDefinitionPostProcessor】DubboConfigDefaultPropertyValueBeanPostProcessor.postProcessMergedBeanDefinition方法:目前是空方法："
+                        + beanName);
     }
 
     protected void setPropertyIfAbsent(Object bean, String propertyName, String beanName) {

@@ -686,6 +686,7 @@ public class ServiceAnnotationPostProcessor
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        logger.info("自定义日志---调用getBean：" + ServicePackagesHolder.BEAN_NAME);
         this.servicePackagesHolder =
                 applicationContext.getBean(ServicePackagesHolder.BEAN_NAME, ServicePackagesHolder.class);
     }

@@ -318,6 +318,9 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
 
     @Override
     public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
+        logger.info(
+                "自定义日志---【MergedBeanDefinitionPostProcessor】ReferenceAnnotationBeanPostProcessor.postProcessMergedBeanDefinition方法:目前是空方法："
+                        + beanName);
         if (beanType != null) {
             if (isReferenceBean(beanDefinition)) {
                 // mark property value as optional
@@ -584,13 +587,14 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
             throw new IllegalStateException(
                     "The AnnotatedInjectElement of @DubboReference should be inited before injection");
         }
-
+        logger.info("自定义日志---调用getBean：" + (String) injectedElement.injectedObject);
         return getBeanFactory().getBean((String) injectedElement.injectedObject);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        logger.info("自定义日志---调用getBean：" + ReferenceBeanManager.BEAN_NAME);
         this.referenceBeanManager =
                 applicationContext.getBean(ReferenceBeanManager.BEAN_NAME, ReferenceBeanManager.class);
         this.beanDefinitionRegistry = (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();

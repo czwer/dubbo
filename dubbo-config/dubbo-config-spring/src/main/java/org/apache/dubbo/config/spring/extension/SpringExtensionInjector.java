@@ -19,6 +19,8 @@ package org.apache.dubbo.config.spring.extension;
 import org.apache.dubbo.common.extension.ExtensionAccessor;
 import org.apache.dubbo.common.extension.ExtensionInjector;
 import org.apache.dubbo.common.extension.SPI;
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.StringUtils;
 
 import java.util.Arrays;
@@ -30,7 +32,7 @@ import org.springframework.context.ApplicationContext;
  * SpringExtensionInjector
  */
 public class SpringExtensionInjector implements ExtensionInjector {
-
+    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(SpringExtensionInjector.class);
     private ApplicationContext context;
 
     @Deprecated
@@ -76,6 +78,7 @@ public class SpringExtensionInjector implements ExtensionInjector {
             return getOptionalBeanByType(beanFactory, type);
         }
         if (beanFactory.containsBean(name)) {
+            logger.info("自定义日志---调用getBean：" + name);
             return beanFactory.getBean(name, type);
         }
         return null;
@@ -90,6 +93,7 @@ public class SpringExtensionInjector implements ExtensionInjector {
             throw new IllegalStateException("Expect single but found " + beanNamesForType.length
                     + " beans in spring context: " + Arrays.toString(beanNamesForType));
         }
+        logger.info("自定义日志---调用getBean：" + beanNamesForType[0]);
         return beanFactory.getBean(beanNamesForType[0], type);
     }
 }

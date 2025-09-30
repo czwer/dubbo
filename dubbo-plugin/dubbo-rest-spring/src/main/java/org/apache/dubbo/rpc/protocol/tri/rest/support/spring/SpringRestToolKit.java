@@ -56,7 +56,7 @@ import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.util.PropertyPlaceholderHelper;
 
 final class SpringRestToolKit implements RestToolKit {
-
+    private final Logger logger = LoggerFactory.getLogger(SpringRestToolKit.class);
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringRestToolKit.class);
 
     private final Map<MethodParameterMeta, TypeDescriptor> cache = CollectionUtils.newConcurrentHashMap();
@@ -83,6 +83,7 @@ final class SpringRestToolKit implements RestToolKit {
             configuration = new ConfigurationWrapper(applicationModel);
         }
         if (context != null && context.containsBean("mvcConversionService")) {
+            logger.info("自定义日志---调用getBean：mvcConversionService");
             conversionService = context.getBean("mvcConversionService", ConversionService.class);
         } else {
             conversionService = DefaultConversionService.getSharedInstance();

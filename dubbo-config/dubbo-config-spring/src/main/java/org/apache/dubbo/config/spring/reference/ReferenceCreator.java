@@ -65,7 +65,7 @@ public class ReferenceCreator {
 
     private static final String METHOD = "Method";
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(ReferenceCreator.class);
 
     protected final Map<String, Object> attributes;
 
@@ -153,6 +153,7 @@ public class ReferenceCreator {
         if (config == null) {
             // 2. find in Spring ApplicationContext
             if (applicationContext.containsBean(configIdOrName)) {
+                logger.info("自定义日志---调用getBean：" + configIdOrName);
                 config = applicationContext.getBean(configIdOrName, configType);
             }
         }
@@ -223,9 +224,11 @@ public class ReferenceCreator {
                 if (index != -1) {
                     String beanName = strValue.substring(0, index);
                     String methodName = strValue.substring(index + 1);
+                    logger.info("自定义日志---调用getBean：" + beanName);
                     methodAttributes.put(callbackName, applicationContext.getBean(beanName));
                     methodAttributes.put(callbackName + METHOD, methodName);
                 } else {
+                    logger.info("自定义日志---调用getBean：" + strValue);
                     methodAttributes.put(callbackName, applicationContext.getBean(strValue));
                 }
             }

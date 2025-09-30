@@ -22,6 +22,8 @@ import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.aot.hint.ExecutableMode;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.TypeConverter;
@@ -50,7 +52,7 @@ import org.springframework.util.function.ThrowingConsumer;
  * used (typically to support private fields).
  */
 public final class ReferencedFieldValueResolver extends AutowiredElementResolver {
-
+    private final Log logger = LogFactory.getLog(ReferencedFieldValueResolver.class);
     private final String fieldName;
 
     private final boolean required;
@@ -187,7 +189,7 @@ public final class ReferencedFieldValueResolver extends AutowiredElementResolver
         TypeConverter typeConverter = beanFactory.getTypeConverter();
         try {
             Assert.isInstanceOf(AutowireCapableBeanFactory.class, beanFactory);
-
+            logger.info("自定义日志---调用getBean：" + shortcut);
             Object injectedObject = beanFactory.getBean(shortcut);
 
             Object value = ((AutowireCapableBeanFactory) beanFactory)

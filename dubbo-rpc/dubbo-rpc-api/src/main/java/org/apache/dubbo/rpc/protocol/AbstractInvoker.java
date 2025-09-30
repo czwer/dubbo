@@ -172,6 +172,7 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
 
     @Override
     public Result invoke(Invocation inv) throws RpcException {
+        logger.info("自定义日志---【Invoker】调用AbstractInvoker.invoke方法");
         // if invoker is destroyed due to address refresh from registry, let's allow the current invoke to proceed
         if (isDestroyed()) {
             logger.warn(

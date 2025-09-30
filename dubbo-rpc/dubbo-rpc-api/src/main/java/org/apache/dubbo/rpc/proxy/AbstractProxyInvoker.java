@@ -85,6 +85,7 @@ public abstract class AbstractProxyInvoker<T> implements Invoker<T> {
 
     @Override
     public Result invoke(Invocation invocation) throws RpcException {
+        logger.info("自定义日志---【Invoker】调用AbstractProxyInvoker.invoke方法");
         ProfilerEntry originEntry = null;
         try {
             if (ProfilerSwitch.isEnableSimpleProfiler()) {

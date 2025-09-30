@@ -35,7 +35,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class MockSpringInitCustomizer implements DubboSpringInitCustomizer {
-    final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(MockSpringInitCustomizer.class);
+    static final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(MockSpringInitCustomizer.class);
 
     private List<DubboSpringInitContext> contexts = new ArrayList<>();
 
@@ -93,6 +93,7 @@ public class MockSpringInitCustomizer implements DubboSpringInitCustomizer {
         Assertions.assertEquals(true, foundInitContext);
 
         // expect CustomBeanFactoryPostProcessor is loaded and invoked
+        logger.info("自定义日志---调用getBean：CustomBeanFactoryPostProcessor");
         CustomBeanFactoryPostProcessor customBeanFactoryPostProcessor =
                 applicationContext.getBean(CustomBeanFactoryPostProcessor.class);
         Assertions.assertEquals(applicationContext.getBeanFactory(), customBeanFactoryPostProcessor.beanFactory);

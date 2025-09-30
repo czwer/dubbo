@@ -209,6 +209,7 @@ public interface DubboBeanUtils {
     static DubboSpringInitContext getInitializationContext(BeanFactory beanFactory) {
         String beanName = DubboSpringInitContext.class.getName();
         if (beanFactory != null && beanFactory.containsBean(beanName)) {
+            logger.info("自定义日志---调用getBean：" + beanName);
             return beanFactory.getBean(beanName, DubboSpringInitContext.class);
         }
         return null;
@@ -217,6 +218,7 @@ public interface DubboBeanUtils {
     static ApplicationModel getApplicationModel(BeanFactory beanFactory) {
         String beanName = ApplicationModel.class.getName();
         if (beanFactory != null && beanFactory.containsBean(beanName)) {
+            logger.info("自定义日志---调用getBean：" + beanName);
             return beanFactory.getBean(beanName, ApplicationModel.class);
         }
         return null;
@@ -225,6 +227,7 @@ public interface DubboBeanUtils {
     static ModuleModel getModuleModel(BeanFactory beanFactory) {
         String beanName = ModuleModel.class.getName();
         if (beanFactory != null && beanFactory.containsBean(beanName)) {
+            logger.info("自定义日志---调用getBean：" + beanName);
             return beanFactory.getBean(beanName, ModuleModel.class);
         }
         return null;
@@ -233,6 +236,7 @@ public interface DubboBeanUtils {
     static ConfigManager getConfigManager(BeanFactory beanFactory) {
         String beanName = ConfigManager.BEAN_NAME;
         if (beanFactory.containsBean(beanName)) {
+            logger.info("自定义日志---调用getBean：" + beanName);
             return beanFactory.getBean(beanName, ConfigManager.class);
         }
         return null;

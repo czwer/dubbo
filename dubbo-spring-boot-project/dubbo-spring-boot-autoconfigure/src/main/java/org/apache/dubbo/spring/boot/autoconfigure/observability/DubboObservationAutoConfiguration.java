@@ -101,6 +101,7 @@ public class DubboObservationAutoConfiguration
     public void onApplicationEvent(DubboConfigInitEvent event) {
         logger.info("自定义日志---监听到事件：DubboConfigInitEvent，timestamp：" + event.getTimestamp());
         try {
+            logger.info("自定义日志---调用getBean：ObservationRegistry");
             applicationModel
                     .getBeanFactory()
                     .registerBean(beanFactory.getBean(io.micrometer.observation.ObservationRegistry.class));

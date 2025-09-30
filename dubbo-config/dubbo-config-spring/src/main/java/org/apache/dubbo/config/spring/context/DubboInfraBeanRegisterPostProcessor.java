@@ -60,6 +60,7 @@ public class DubboInfraBeanRegisterPostProcessor implements BeanDefinitionRegist
             // register ReferenceAnnotationBeanPostProcessor early before
             // PropertySourcesPlaceholderConfigurer/PropertyPlaceholderConfigurer
             // for processing early init ReferenceBean
+            logger.info("自定义日志---调用getBean：" + ReferenceAnnotationBeanPostProcessor.BEAN_NAME);
             ReferenceAnnotationBeanPostProcessor referenceAnnotationBeanPostProcessor = beanFactory.getBean(
                     ReferenceAnnotationBeanPostProcessor.BEAN_NAME, ReferenceAnnotationBeanPostProcessor.class);
             logger.info("自定义日志---【添加BeanPostProcessor】：ReferenceAnnotationBeanPostProcessor");

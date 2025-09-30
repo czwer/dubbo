@@ -165,6 +165,7 @@ public class ConfigurationBeanBindingPostProcessor implements BeanPostProcessor,
     private void initConfigurationBeanBinder() {
         if (configurationBeanBinder == null) {
             try {
+                log.info("自定义日志---调用getBean：ConfigurationBeanBinder");
                 configurationBeanBinder = beanFactory.getBean(ConfigurationBeanBinder.class);
             } catch (BeansException ignored) {
                 if (log.isInfoEnabled()) {

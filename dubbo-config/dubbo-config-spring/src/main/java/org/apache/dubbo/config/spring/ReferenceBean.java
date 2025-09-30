@@ -114,7 +114,7 @@ public class ReferenceBean<T>
                 BeanNameAware,
                 InitializingBean,
                 DisposableBean {
-    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(getClass());
+    private final ErrorTypeAwareLogger logger = LoggerFactory.getErrorTypeAwareLogger(ReferenceBean.class);
     private transient ApplicationContext applicationContext;
 
     private ClassLoader beanClassLoader;
@@ -269,7 +269,7 @@ public class ReferenceBean<T>
             this.proxy = (String) referenceProps.get(ReferenceAttributes.PROXY);
         }
         Assert.notNull(this.interfaceName, "The interface name of ReferenceBean is not initialized");
-
+        logger.info("自定义日志---调用getBean：" + ReferenceBeanManager.BEAN_NAME);
         this.referenceBeanManager = beanFactory.getBean(ReferenceBeanManager.BEAN_NAME, ReferenceBeanManager.class);
         referenceBeanManager.addReference(this);
         logger.info("自定义日志【重要】--- 服务消费者的初始化配置工作完成（Spring完成Bean属性注入后触发:afterPropertiesSet）:" + this.id);
@@ -444,6 +444,7 @@ public class ReferenceBean<T>
             synchronized (LockUtils.getSingletonMutex(applicationContext)) {
                 if (referenceConfig == null) {
                     referenceBeanManager.initReferenceBean(this);
+                    logger.info("自定义日志---调用getBean：" + DubboConfigApplicationListener.class.getName());
                     applicationContext
                             .getBean(
                                     DubboConfigApplicationListener.class.getName(),
