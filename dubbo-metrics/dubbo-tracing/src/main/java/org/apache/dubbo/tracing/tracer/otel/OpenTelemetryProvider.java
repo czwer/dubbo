@@ -207,7 +207,7 @@ public class OpenTelemetryProvider implements TracerProvider {
 
         @Override
         public void publishEvent(Object event) {
-            logger.info("自定义日志---发布事件：" + event.getClass().getName());
+            logger.info("自定义日志---【发布事件】" + event.getClass().getName());
             for (EventListener listener : this.listeners) {
                 listener.onEvent(event);
             }

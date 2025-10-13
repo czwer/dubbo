@@ -44,7 +44,7 @@ public class SimpleMetricsEventMulticaster implements MetricsEventMulticaster {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void publishEvent(MetricsEvent event) {
         if (validateIfApplicationConfigExist(event)) return;
-        logger.info("自定义日志---发布事件：MetricsEvent");
+        logger.info("自定义日志---【发布事件】MetricsEvent");
         for (MetricsListener listener : listeners) {
             if (listener.isSupport(event)) {
                 listener.onEvent(event);

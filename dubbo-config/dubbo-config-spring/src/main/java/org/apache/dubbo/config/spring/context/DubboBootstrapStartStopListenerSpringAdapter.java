@@ -38,7 +38,7 @@ public class DubboBootstrapStartStopListenerSpringAdapter implements DubboBootst
     @Override
     public void onStart(DubboBootstrap bootstrap) {
         if (applicationContext != null) {
-            logger.info("自定义日志---发布事件：DubboBootstrapStatedEvent");
+            logger.info("自定义日志---【发布事件】DubboBootstrapStatedEvent");
             applicationContext.publishEvent(new DubboBootstrapStatedEvent(bootstrap));
         }
     }
@@ -46,7 +46,7 @@ public class DubboBootstrapStartStopListenerSpringAdapter implements DubboBootst
     @Override
     public void onStop(DubboBootstrap bootstrap) {
         if (applicationContext != null) {
-            logger.info("自定义日志---发布事件：DubboBootstrapStopedEvent");
+            logger.info("自定义日志---【发布事件】DubboBootstrapStopedEvent");
             applicationContext.publishEvent(new DubboBootstrapStopedEvent(bootstrap));
         }
     }

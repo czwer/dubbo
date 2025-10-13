@@ -57,7 +57,7 @@ public final class DefaultSubDispatcher extends SimpleMetricsEventMulticaster {
 
             @Override
             public void onEvent(RequestEvent event) {
-                logger.info("自定义日志---监听到事件：RequestEvent");
+                logger.info("自定义日志---【监听事件】RequestEvent");
                 MetricsSupport.increment(
                         METRIC_REQUESTS_SERVICE_UNAVAILABLE_FAILED,
                         dynamicPlaceType,

@@ -327,7 +327,7 @@ public class OpenTelemetryAutoConfiguration {
 
         @Override
         public void publishEvent(Object event) {
-            logger.info("自定义日志---发布事件：" + event.getClass().getName());
+            logger.info("自定义日志---【发布事件】" + event.getClass().getName());
             for (io.micrometer.tracing.otel.bridge.EventListener listener : this.listeners) {
                 listener.onEvent(event);
             }

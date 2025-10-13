@@ -662,7 +662,7 @@ public class ServiceAnnotationPostProcessor
             throw new BeanDefinitionStoreException(
                     serviceBeanDefinition.getResourceDescription(), serviceBeanName, msg);
         }
-        logger.info("自定义日志---准备注册bean定义：" + serviceBeanName);
+        logger.info("自定义日志【业务Bean】【dubbo接口注册bean定义】---准备注册bean定义：" + serviceBeanName);
         registry.registerBeanDefinition(serviceBeanName, serviceBeanDefinition);
         if (logger.isInfoEnabled()) {
             logger.info("Register ServiceBean[" + serviceBeanName + "]: " + serviceBeanDefinition);

@@ -55,7 +55,7 @@ public abstract class AbstractMetricsKeyListener extends AbstractMetricsListener
         return new AbstractMetricsKeyListener(metricsKey) {
             @Override
             public void onEvent(TimeCounterEvent event) {
-                logger.info("自定义日志---监听到事件：TimeCounterEvent");
+                logger.info("自定义日志---【监听事件】TimeCounterEvent");
                 postFunc.accept(event);
             }
         };

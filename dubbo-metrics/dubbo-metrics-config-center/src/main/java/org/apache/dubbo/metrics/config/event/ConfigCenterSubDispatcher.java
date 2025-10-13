@@ -44,7 +44,7 @@ public final class ConfigCenterSubDispatcher extends SimpleMetricsEventMulticast
 
             @Override
             public void onEvent(TimeCounterEvent event) {
-                logger.info("自定义日志---监听到事件：TimeCounterEvent");
+                logger.info("自定义日志---【监听事件】TimeCounterEvent");
                 collector.increase(
                         event.getAttachmentValue(ATTACHMENT_KEY_CONFIG_FILE),
                         event.getAttachmentValue(ATTACHMENT_KEY_CONFIG_GROUP),

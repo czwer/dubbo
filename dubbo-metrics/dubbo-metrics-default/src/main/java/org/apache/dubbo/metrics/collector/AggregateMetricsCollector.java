@@ -135,7 +135,7 @@ public class AggregateMetricsCollector implements MetricsCollector<RequestEvent>
 
     @Override
     public void onEvent(RequestEvent event) {
-        logger.info("自定义日志---监听到事件：RequestEvent");
+        logger.info("自定义日志---【监听事件】RequestEvent");
         if (enableQps) {
             MethodMetric metric = calcWindowCounter(event, MetricsKey.METRIC_REQUESTS);
             TimeWindowCounter qpsCounter = qps.get(metric);

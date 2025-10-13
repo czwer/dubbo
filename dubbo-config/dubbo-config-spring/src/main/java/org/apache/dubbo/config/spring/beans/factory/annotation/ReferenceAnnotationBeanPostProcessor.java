@@ -188,7 +188,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
         try {
             // this is an early event, it will be notified at
             // org.springframework.context.support.AbstractApplicationContext.registerListeners()
-            logger.info("自定义日志---发布事件：DubboConfigInitEvent");
+            logger.info("自定义日志---【发布事件】DubboConfigInitEvent");
             applicationContext.publishEvent(new DubboConfigInitEvent(applicationContext));
         } catch (Exception e) {
             // if spring version is less than 4.2, it does not support early application event
