@@ -68,7 +68,7 @@ public class ServiceBeanIdConflictProcessor
     @Override
     public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
         logger.info(
-                "自定义日志---【MergedBeanDefinitionPostProcessor】ServiceBeanIdConflictProcessor.postProcessMergedBeanDefinition方法："
+                "自定义日志---【MergedBeanDefinitionPostProcessor】ServiceBeanIdConflictProcessor.postProcessMergedBeanDefinition方法：Dubbo的ServiceBean进行“体检”，预防因ID冲突导致的后续问题"
                         + beanName);
         // Get raw bean type
         Class<?> rawBeanType = getUserClass(beanType);
