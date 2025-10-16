@@ -319,7 +319,7 @@ public class ReferenceAnnotationBeanPostProcessor extends AbstractAnnotationBean
     @Override
     public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
         logger.info(
-                "自定义日志---【MergedBeanDefinitionPostProcessor】ReferenceAnnotationBeanPostProcessor.postProcessMergedBeanDefinition方法:目前是空方法："
+                "自定义日志---【MergedBeanDefinitionPostProcessor】ReferenceAnnotationBeanPostProcessor.postProcessMergedBeanDefinition方法:用于检查Bean中是否含@DubboReference，@Reference注解："
                         + beanName);
         if (beanType != null) {
             if (isReferenceBean(beanDefinition)) {
