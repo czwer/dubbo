@@ -57,12 +57,16 @@ public class DubboComponentScanRegistrar implements ImportBeanDefinitionRegistra
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+        logger.info(
+                "自定义日志【重要】---DubboComponentScanRegistrar通过@Import导入，在registerBeanDefinitions方法中调用：DubboSpringInitializer.initialize(registry)方法");
 
         // initialize dubbo beans
         DubboSpringInitializer.initialize(registry);
 
         Set<String> packagesToScan = getPackagesToScan(importingClassMetadata);
-
+        packagesToScan.forEach(e -> {
+            logger.info("Dubbo扫描包名称：" + e);
+        });
         registerServiceAnnotationPostProcessor(packagesToScan, registry);
     }
 
@@ -77,7 +81,8 @@ public class DubboComponentScanRegistrar implements ImportBeanDefinitionRegistra
 
         BeanDefinitionBuilder builder = rootBeanDefinition(SpringCompatUtils.serviceAnnotationPostProcessor());
         builder.addConstructorArgValue(packagesToScan);
-        logger.info("自定义日志---标识ROLE_INFRASTRUCTURE");
+        logger.info("自定义日志---标识ROLE_INFRASTRUCTURE："
+                + builder.getBeanDefinition().getBeanClass().getName());
         builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
         AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
         BeanDefinitionReaderUtils.registerWithGeneratedName(beanDefinition, registry);

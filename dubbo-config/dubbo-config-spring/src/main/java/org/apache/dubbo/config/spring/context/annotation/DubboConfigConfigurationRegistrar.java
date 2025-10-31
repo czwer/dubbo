@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.config.spring.context.annotation;
 
+import org.apache.dubbo.common.logger.ErrorTypeAwareLogger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.config.AbstractConfig;
 import org.apache.dubbo.config.spring.context.DubboSpringInitializer;
 
@@ -33,10 +35,14 @@ import org.springframework.core.type.AnnotationMetadata;
  * @since 2.5.8
  */
 public class DubboConfigConfigurationRegistrar implements ImportBeanDefinitionRegistrar {
+    public static final ErrorTypeAwareLogger logger =
+            LoggerFactory.getErrorTypeAwareLogger(DubboConfigConfigurationRegistrar.class);
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         // initialize dubbo beans
+        logger.info(
+                "自定义日志【重要】---DubboConfigConfigurationRegistrar通过@Import导入，在registerBeanDefinitions方法中调用：DubboSpringInitializer.initialize(registry)方法");
         DubboSpringInitializer.initialize(registry);
     }
 }
