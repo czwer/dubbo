@@ -284,9 +284,9 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         if (registered) {
             Object o = beanDefinition.getPropertyValues().get("interface");
             if (o != null) {
-                logger.info("自定义日志【业务Bean】【dubbo接口注册bean定义】---准备注册bean定义：" + beanName + ",接口名称：" + o.toString());
+                logger.info("自定义日志【dubbo注册bean定义】---准备注册bean定义：" + beanName + ",接口名称：" + o.toString());
             } else {
-                logger.info("自定义日志【系统基础Bean】---准备注册bean定义：" + beanName);
+                logger.info("自定义日志【dubbo注册bean定义】---准备注册bean定义：" + beanName);
             }
             parserContext.getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
